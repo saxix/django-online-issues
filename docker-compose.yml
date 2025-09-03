@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_USER=redmine
+      - POSTGRES_DB=redmine_production
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - redmine_net
+
+  redmine:
+    image: redmine:5.1
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    environment:
+      - REDMINE_DB_POSTGRES=db
+      - REDMINE_DB_USERNAME=redmine
+      - REDMINE_DB_PASSWORD=mysecretpassword
+      - REDMINE_DB_DATABASE=redmine_production
+      # To enable the API, you need to log in to your Redmine instance as an administrator,
+      # go to "Administration" -> "Settings" -> "API" and check "Enable REST web service".
+      # You can also generate an API key for your user account on your "My account" page.
+    volumes:
+      - redmine_files:/usr/src/redmine/files
+    networks:
+      - redmine_net
+
+volumes:
+  postgres_data:
+  redmine_files:
+
+networks:
+  redmine_net:

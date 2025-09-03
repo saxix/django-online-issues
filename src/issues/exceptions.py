@@ -1,0 +1,2 @@
+class IssueError(Exception):
+    pass

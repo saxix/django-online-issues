@@ -1,0 +1,27 @@
+[run]
+branch = True
+source = src
+source_pkgs = issues
+relative_files = True
+# partial_branches =
+omit =
+    **/~*/*
+    **/~*
+    **/migrations/**
+    **/version.py
+    **/checks.py
+
+
+[report]
+# Regexes for lines to exclude from consideration
+exclude_lines =
+    pragma: no cover
+    if DEBUG
+    if settings.DEBUG:
+    if TYPE_CHECKING
+    raise NotImplementedError
+
+ignore_errors = True
+
+[html]
+directory = ./~build/coverage

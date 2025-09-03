@@ -1,0 +1,17 @@
+.*
+~*
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+site
+wheels/
+*.egg-info
+*.sqlite
+
+src/issues/version.py
+!.gitignore
+!.github
+!tests/.coveragerc
+!.python-version

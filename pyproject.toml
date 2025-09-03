@@ -1,0 +1,107 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = [
+  "hatch-vcs>=0.4",
+  "hatchling>=1.25",
+]
+
+[project]
+name = "django-issues"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+  { name = "Stefano Apostolico", email = "s.apostolico@gmail.com" },
+]
+requires-python = ">=3.9"
+classifiers = [
+  "Environment :: Web Environment",
+  "Framework :: Django",
+  "Framework :: Django :: 4.2",
+  "Framework :: Django :: 5.2",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Libraries :: Application Frameworks",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dynamic = [
+  "version",
+]
+dependencies = [
+  "django>=4",
+  "django-stubs-ext",
+  "markdown>=3.8.2",
+  "requests>=2.32.5",
+]
+optional-dependencies.github = [
+  "pygithub>=2.8",
+]
+optional-dependencies.gitlab = [
+  "python-gitlab>=6.3",
+]
+
+urls.Documentation = "https://github.com/saxix/django-issues"
+urls.Homepage = "https://github.com/saxix/django-issues"
+
+[dependency-groups]
+dev = [
+  "django-webtest>=1.9.13",
+  "factory-boy>=3.3.3",
+  "pre-commit>=3.3.3",
+  "pytest>=8.4.1",
+  "pytest-cov>=6.2.1",
+  "pytest-django>=4.11.1",
+  "pytest-responses>=0.5.1",
+  "responses>=0.25.8",
+  "seleniumbase>=4.38.2",
+  "tox>=4.29",
+  "tox-uv>=1.28",
+]
+
+docs = [
+  "markupsafe>=2.1.5",
+  "mdx-gh-links>=0.4",
+  "mkdocs>=1.6.1",
+  "mkdocs-autolinks-plugin>=0.7.1",
+  "mkdocs-awesome-pages-plugin>=2.10.1",
+  "mkdocs-click>=0.8.1",
+  "mkdocs-embed-external-markdown>=3.0.2",
+  "mkdocs-ezglossary-plugin>=1.6.10",
+  "mkdocs-ezlinks-plugin>=0.1.14",
+  "mkdocs-gen-files>=0.5",
+  "mkdocs-get-deps>=0.2",
+  "mkdocs-include-markdown-plugin>=6.2.2",
+  "mkdocs-link-marker>=0.1.3",
+  "mkdocs-macros-plugin>=1.0.5",
+  "mkdocs-material>=9.5.15",
+  "mkdocs-minify-plugin>=0.8",
+  "mkdocs-redirects>=1.2.1",
+  "mkdocs-simple-hooks>=0.1.5",
+  "mkdocstrings[python]>=0.27",
+  "pymdown-extensions>=10.14",
+]
+type-check = [
+  "django-stubs[compatible-mypy]",
+  "mypy",
+  "types-markdown",
+]
+
+[tool.hatch]
+build.hooks.vcs.version-file = "src/issues/version.py"
+version.source = "vcs"
+raw-options = { root = "../.." }
+
+[tool.hatch.build.targets.sdist]
+ignore-vcs = true
+include = [
+  "src/issues/**/*.*",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = [ "src/issues" ]

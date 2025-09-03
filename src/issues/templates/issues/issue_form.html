@@ -1,0 +1,28 @@
+<form id="django-issues-form" method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+{# {{ form.type.label_tag }} #}
+    <p>{{ form.type }} {{ form.type.errors }}</p>
+
+{# {{ form.title.label_tag }} #}
+    <p>{{ form.title }} {{ form.title.errors }}</p>
+
+{# {{ form.description.label_tag }} #}
+    <p> {{ form.description }} {{ form.description.errors }}</p>
+
+    {{ form.url }}
+    {{ form.screenshot }}
+
+    <p>
+        {{ form.add_screenshot.label_tag }} {{ form.add_screenshot }}
+{# <label for="{{ form.add_screenshot.id_for_label }}">Add screenshot</label> #}
+        {{ form.add_screenshot.errors }}
+    </p>
+
+    <div id="screenshot-preview-container">
+        <img id="screenshot-preview-img" style="max-width: 100%;">
+    </div>
+
+    <button type="submit">Submit</button>
+</form>

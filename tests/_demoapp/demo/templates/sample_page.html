@@ -1,0 +1,18 @@
+{% load issues static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sample Page</title>
+</head>
+<body>
+
+    <h1>Sample Page</h1>
+    <p>This is a sample page to demonstrate the issue reporting modal.</p>
+
+    <button id="issue-opener" class="button primary large">Report an Issue</button>
+
+
+    {% issues_tags %}
+
+</body>
+</html>
