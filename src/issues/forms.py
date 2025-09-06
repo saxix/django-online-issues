@@ -7,7 +7,6 @@ class IssueFormCleanedData(TypedDict):
     type: str
     title: str
     description: str
-    # url: str
     add_screenshot: bool
     screenshot: str
 
@@ -23,6 +22,5 @@ class IssueForm(forms.Form):
     )
     title = forms.CharField(widget=forms.TextInput({"placeholder": "issue title", "autofocus": "autofocus"}))
     description = forms.CharField(widget=forms.Textarea({"placeholder": "description"}))
-    # url = forms.CharField(widget=forms.HiddenInput, required=False)
     add_screenshot = forms.BooleanField(required=False, widget=forms.CheckboxInput, initial=True)
     screenshot = forms.CharField(widget=forms.HiddenInput, required=False)
