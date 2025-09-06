@@ -7,7 +7,7 @@ from issues.backends.debug import Backend as DebugBackend
 pytestmark = pytest.mark.selenium
 
 
-@pytest.fixture(params=["html2canvas", "dom-to-image"])
+@pytest.fixture(params=["html2canvas", "dom-to-image", None])
 def renderer(request):
     return request.param
 
@@ -36,6 +36,8 @@ def test_crawl(browser: Browser, debug_backend: DebugBackend):
     assert message.startswith("Please fill ")
 
     browser.type("#id_description", "Description....")
+    # browser.click("#id_add_screenshot")
+
     browser.click("#django-issues-form button[type='submit']")
 
     browser.assert_element_not_visible("#django-issues-modal-overlay")

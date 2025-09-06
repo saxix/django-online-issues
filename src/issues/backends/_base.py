@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Any, TypedDict
 
 from issues.exceptions import IssueError
-from issues.utils import get_client_ip, get_user, get_user_agent, get_version
+from issues.forms import IssueFormCleanedData
 
 if TYPE_CHECKING:
     from issues.types import AuthenticatedHttpRequest
@@ -11,10 +11,11 @@ class IssueData(TypedDict):
     title: str
     type: str
     description: str
-    screenshot: str
 
 
 class BaseBackend:
+    screenshot_supported: bool = True
+
     def __init__(self, request: "AuthenticatedHttpRequest") -> None:
         self.request = request
 
@@ -26,25 +27,24 @@ class BaseBackend:
         except KeyError as e:
             raise IssueError("Issues backend Improperly configured") from e
 
+    def get_context(self) -> dict[str, Any]:
+        from issues.config import CONFIG
+
+        data = {
+            "extras": {},
+            "user": CONFIG.ANNOTATIONS["get_user"](self.request),
+            "user_agent": CONFIG.ANNOTATIONS["get_user_agent"](self.request),
+            "version": CONFIG.ANNOTATIONS["get_version"](self.request),
+            "remote_ip": CONFIG.ANNOTATIONS["get_client_ip"](self.request),
+        }
+        data["extras"] = CONFIG.ANNOTATIONS["get_extra_info"](self.request, data)
+        return data
+
     def get_description(self, parameters: dict[str, Any]) -> str:
         from issues.config import CONFIG
 
         template: str = CONFIG.ISSUE_TEMPLATE
-        return template.format(
-            user=get_user(self.request),
-            user_agent=get_user_agent(self.request),
-            remote_ip=get_client_ip(self.request),
-            version=get_version(self.request),
-            **parameters,
-        )
+        return template.format(**self.get_context(), **parameters)
 
-    def get_ticket_data(self, infos: dict[str, Any]) -> IssueData:
-        return {
-            "title": infos.get("title", ""),
-            "type": infos.get("type", "issue"),
-            "description": self.get_description(infos),
-            "screenshot": "",
-        }
-
-    def create_ticket(self, cleaned_data: dict[str, Any]) -> bool:
+    def create_ticket(self, cleaned_data: IssueFormCleanedData) -> bool:
         raise NotImplementedError(f"{self.__class__.__name__} does not implement create_ticket")

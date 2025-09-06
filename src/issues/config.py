@@ -1,4 +1,4 @@
-from copy import deepcopy
+from collections import ChainMap
 from typing import Any
 
 from django.conf import settings
@@ -16,42 +16,55 @@ ISSUE_TEMPLATE = """
 ---
 {description}
 
-{screenshot}
+{screenshot_url}
 """
 
 
 class IssuesConfig:
-    DEFAULTS = {
+    _ANNOTATIONS: dict[str, str] = {
+        "get_extra_info": "issues.utils.get_extra_info",
+        "get_version": "issues.utils.get_version",
+        "get_user_agent": "issues.utils.get_user_agent",
+        "get_labels": "issues.utils.get_labels",
+        "get_user": "issues.utils.get_user",
+        "get_client_ip": "issues.utils.get_client_ip",
+    }
+    _DEFAULTS = {
         "BACKEND": "issues.backends.console.Backend",
         "RENDERER": "html2canvas",  # or rasterizeHTML or dom-to-image
         "ISSUE_TEMPLATE": ISSUE_TEMPLATE,
         "OPTIONS": {},
-        "ANNOTATIONS": {
-            "get_extra_info": "issues.utils.get_extra_info",
-            "get_version": "issues.utils.get_version",
-            "get_user_agent": "issues.utils.get_user_agent",
-            "get_labels": "issues.utils.get_labels",
-        },
     }
 
     def __init__(self) -> None:
         self._overrides = getattr(settings, "ISSUES", {})
-        self._parsed = {
-            **deepcopy(self.DEFAULTS),
-            **deepcopy(self._overrides),
-        }
-        self._parsed["BACKEND"] = import_string(self._parsed["BACKEND"])
-        for k, v in self._parsed["ANNOTATIONS"].items():
-            if isinstance(v, str):
-                self._parsed["ANNOTATIONS"][k] = import_string(v)
+        ann = {"ANNOTATIONS": ChainMap(self._overrides.get("ANNOTATIONS", {}), self._ANNOTATIONS)}
+        self._parsed = ChainMap(ann, self._overrides, self._DEFAULTS)
+        self._cached: dict[str, Any] = {}
 
     def __repr__(self) -> str:
         return str(self._parsed)
 
     def __getattr__(self, name: str) -> Any:
-        if name in self._parsed:
-            return self._parsed[name]
-        raise AttributeError(f" 'IssuesConfig' object has no attribute '{name}'")
+        if name not in self._parsed:
+            raise AttributeError(f" 'IssuesConfig' object has no attribute '{name}'")
+        if name not in self._cached:
+            if name == "BACKEND":
+                self._cached[name] = import_string(settings.ISSUES["BACKEND"])
+            elif name == "ANNOTATIONS":
+                self._cached["ANNOTATIONS"] = {}
+                for k, v in self._parsed["ANNOTATIONS"].items():
+                    if k not in self._ANNOTATIONS:
+                        raise AttributeError(f" 'IssuesConfig' object has no annotation '{k}'")
+                    if isinstance(v, str) and v:
+                        self._cached["ANNOTATIONS"][k] = import_string(v)
+                    elif callable(v):
+                        self._cached["ANNOTATIONS"][k] = v
+                    else:
+                        raise AttributeError(f" 'IssuesConfig' object has no annotation '{k}'")
+            else:
+                self._cached[name] = self._parsed[name]
+        return self._cached[name]
 
 
 CONFIG = IssuesConfig()

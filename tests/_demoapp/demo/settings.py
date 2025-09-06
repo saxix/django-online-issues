@@ -59,4 +59,7 @@ INSTALLED_APPS = (
 )
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-ISSUES = {"BACKEND": "issues.backends.console.Backend"}
+ISSUES = {
+    "BACKEND": "issues.backends.console.Backend",
+    # "RENDERER": None,
+}

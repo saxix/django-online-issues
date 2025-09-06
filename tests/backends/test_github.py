@@ -5,9 +5,6 @@ import responses
 
 from issues.backends.github import Backend as GithubBackend
 
-# if os.environ.get("GITHUB_API_TOKEN") == "-not/available-":
-#     pytest.skip("GITHUB_API_TOKEN is not available, skipping Github tests", allow_module_level=True)
-
 
 @pytest.fixture
 def backend(rf, settings, admin_user):

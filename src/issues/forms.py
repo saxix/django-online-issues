@@ -1,4 +1,15 @@
+from typing import TypedDict
+
 from django import forms
+
+
+class IssueFormCleanedData(TypedDict):
+    type: str
+    title: str
+    description: str
+    url: str
+    add_screenshot: bool
+    screenshot: str
 
 
 class IssueForm(forms.Form):

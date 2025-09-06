@@ -42,68 +42,67 @@ document.addEventListener('DOMContentLoaded', function () {
     const issueOpener = document.getElementById(OPENER_ID);
     if (issueOpener) {
         issueOpener.addEventListener('click', function() {
-            let screenshotPromise;
-            if (SCREENSHOT_LIBRARY === 'html2canvas') {
-                screenshotPromise = html2canvas(document.body, {
-                    width: window.innerWidth,
-                    height: document.documentElement.scrollHeight,
-                    allowTaint: true,
-                    scale: 1,
-                    foreignObjectRendering: true,
-                    useCORS: true,
-                }).then(canvas => canvas.toDataURL("image/png"));
-            } else if (SCREENSHOT_LIBRARY === 'dom-to-image') {
-                screenshotPromise = domtoimage.toPng(document.body);
+            let screenshotPromise = Promise.resolve(null); // Default to no screenshot data
+
+            if (SCREENSHOT_LIBRARY) { // Only attempt screenshot if a library is configured
+                if (SCREENSHOT_LIBRARY === 'html2canvas') {
+                    screenshotPromise = html2canvas(document.body, {
+                        width: window.innerWidth,
+                        height: document.documentElement.scrollHeight,
+                        allowTaint: true,
+                        scale: 1,
+                        foreignObjectRendering: true,
+                        useCORS: true,
+                    }).then(canvas => canvas.toDataURL("image/png"));
+                } else if (SCREENSHOT_LIBRARY === 'dom-to-image') {
+                    screenshotPromise = domtoimage.toPng(document.body);
+                }
             }
 
-            if (screenshotPromise) {
-                screenshotPromise.then(function (screenshotData) {
-                    createModal(); // Ensure the modal structure exists
+            screenshotPromise.then(function (screenshotData) {
+                createModal(); // Ensure the modal structure exists
 
-                    axios.get(SUBMIT_URL)
-                        .then(response => {
-                            const formContainer = document.getElementById(FORM_CONTAINER_ID);
-                            const modalOverlay = document.getElementById(MODAL_OVERLAY_ID);
-                            if (formContainer && modalOverlay) {
-                                formContainer.innerHTML = response.data;
+                axios.get(SUBMIT_URL)
+                    .then(response => {
+                        const formContainer = document.getElementById(FORM_CONTAINER_ID);
+                        const modalOverlay = document.getElementById(MODAL_OVERLAY_ID);
+                        if (formContainer && modalOverlay) {
+                            formContainer.innerHTML = response.data;
 
-                                // Find the screenshot input and set its value
-                                const screenshotInput = formContainer.querySelector('input[name="screenshot"]');
-                                if (screenshotInput) {
-                                    screenshotInput.value = screenshotData;
+                            const screenshotInput = formContainer.querySelector('input[name="screenshot"]');
+                            const addScreenshotCheckbox = formContainer.querySelector('input[name="add_screenshot"]');
+                            const screenshotPreviewContainer = document.getElementById(SCREENSHOT_PREVIEW_CONTAINER_ID);
+                            const screenshotPreviewImg = document.getElementById(SCREENSHOT_PREVIEW_IMG_ID);
+
+                            if (SCREENSHOT_LIBRARY) {
+                                // Screenshot support is enabled
+                                screenshotInput.value = screenshotData;
+                                screenshotPreviewImg.src = screenshotData;
+
+                                function togglePreview(show) {
+                                    screenshotPreviewContainer.style.visibility = show ? 'visible' : 'hidden';
+                                    screenshotPreviewContainer.style.opacity = show ? '1' : '0';
                                 }
 
-                                // Handle screenshot preview
-                                const addScreenshotCheckbox = formContainer.querySelector('input[name="add_screenshot"]');
-                                const screenshotPreviewContainer = document.getElementById(SCREENSHOT_PREVIEW_CONTAINER_ID);
-                                const screenshotPreviewImg = document.getElementById(SCREENSHOT_PREVIEW_IMG_ID);
+                                togglePreview(addScreenshotCheckbox.checked);
 
-                                if (addScreenshotCheckbox && screenshotPreviewContainer && screenshotPreviewImg) {
-                                    // Set preview image source
-                                    screenshotPreviewImg.src = screenshotData;
-
-                                    function togglePreview(show) {
-                                        screenshotPreviewContainer.style.visibility = show ? 'visible' : 'hidden';
-                                        screenshotPreviewContainer.style.opacity = show ? '1' : '0';
-                                    }
-
-                                    // Show preview if checkbox is checked
-                                    togglePreview(addScreenshotCheckbox.checked);
-
-                                    // Add event listener to toggle preview
-                                    addScreenshotCheckbox.addEventListener('change', function() {
-                                        togglePreview(this.checked);
-                                    });
-                                }
-
-                                modalOverlay.style.display = 'flex';
+                                addScreenshotCheckbox.addEventListener('change', function() {
+                                    togglePreview(this.checked);
+                                });
+                            } else {
+                                // Screenshot support is disabled
+                                if (screenshotInput) screenshotInput.remove(); // Remove hidden input
+                                if (addScreenshotCheckbox) addScreenshotCheckbox.closest('p').remove(); // Remove checkbox and its label
+                                if (screenshotPreviewContainer) screenshotPreviewContainer.remove(); // Remove preview container
                             }
-                        })
-                        .catch(error => {
-                            console.error('Error loading form:', error);
-                        });
-                });
-            }
+
+                            modalOverlay.style.display = 'flex';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading form:', error);
+                    });
+            });
         });
         issueOpener.style.display = 'block';
     }

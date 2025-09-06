@@ -1,21 +1,27 @@
 import sys
-from typing import Any
 
+from ..forms import IssueFormCleanedData
 from ._base import BaseBackend
 
 
 class Backend(BaseBackend):
-    def create_ticket(self, cleaned_data: dict[str, Any]) -> bool:
+    def create_ticket(self, cleaned_data: IssueFormCleanedData) -> bool:
         from ..config import CONFIG
 
         if "screenshot" in cleaned_data:
-            cleaned_data["screenshot"] = "<screenshot>"
+            screenshot_url = "<screenshot>"
         else:
-            cleaned_data["screenshot"] = "<screenshot not provided>"
+            screenshot_url = "<screenshot not provided>"
+
+        data = {
+            "title": cleaned_data["title"],
+            "type": cleaned_data["type"],
+            "description": self.get_description({**cleaned_data, "screenshot_url": screenshot_url}),
+        }
 
         data = {
             "labels": CONFIG.ANNOTATIONS["get_labels"](self.request, [cleaned_data.get("type", "issue")]),
-            **self.get_ticket_data(cleaned_data),
+            **data,
         }
         for k, v in data.items():
             sys.stdout.write(f"{k}: {v}")

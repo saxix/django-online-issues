@@ -1,21 +1,20 @@
 import base64
-from typing import Any
 
 import markdown
 from django.core.mail import EmailMessage
 
+from ..forms import IssueFormCleanedData
 from ._base import BaseBackend
 
 
 class Backend(BaseBackend):
-    def create_ticket(self, cleaned_data: dict[str, Any]) -> bool:
-        screenshot = cleaned_data.pop("screenshot")
-        cleaned_data["screenshot"] = ""
-        data = self.get_ticket_data(cleaned_data)
-        html_output = markdown.markdown(data["description"])
+    def create_ticket(self, cleaned_data: IssueFormCleanedData) -> bool:
+        screenshot = cleaned_data["screenshot"]
+        description = self.get_description({**cleaned_data, "screenshot_url": ""})
+        html_output = markdown.markdown(description)
         email = EmailMessage(
-            subject=f"[{data['type']}] {data['title']}",
-            body=data["description"],
+            subject=f"[{cleaned_data['type']}] {cleaned_data['title']}",
+            body=description,
             from_email=self.get_option("SENDER"),
             to=self.get_option("RECIPIENTS"),
         )

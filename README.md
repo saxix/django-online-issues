@@ -28,7 +28,7 @@ like GitLab, GitHub, email, or simply the development console.
 - Azure Devops
 - Redmine
 - Odoo Helpdesk
-- ... 
+- ...
 
 ## Screenshot
 

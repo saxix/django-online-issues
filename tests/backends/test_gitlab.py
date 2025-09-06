@@ -1,9 +1,13 @@
 import os
+from typing import TYPE_CHECKING
 
 import pytest
 import responses
 
 from issues.backends.gitlab import Backend as GitlabBackend
+
+if TYPE_CHECKING:
+    from issues.forms import IssueFormCleanedData
 
 
 @pytest.fixture(params=[True, False])
@@ -49,11 +53,12 @@ def test_create(request, backend: GitlabBackend, screenshot: str):
         )
         responses.add(responses.POST, "https://gitlab.com/api/v4/projects/74143440/uploads", json={})
         responses.add(responses.POST, "https://gitlab.com/api/v4/projects/74143440/issues", json={})
-    data = {
+    data: "IssueFormCleanedData" = {
         "title": "login issue",
         "url": "http://example.com",
         "description": "login does no work properly",
         "screenshot": screenshot,
-        "labels": ["bug"],
+        "add_screenshot": bool(screenshot),
+        "type": "bug",
     }
     backend.create_ticket(data)

@@ -26,6 +26,6 @@ class IssueAPIView(View):
         form = IssueForm(data)
         if form.is_valid():
             backend = get_backend(request)
-            backend.create_ticket(form.cleaned_data)
+            backend.create_ticket(form.cleaned_data)  # type: ignore[arg-type]
             return JsonResponse({"success": True, "data": form.cleaned_data})
         return JsonResponse({"success": False, "errors": form.errors}, status=400)

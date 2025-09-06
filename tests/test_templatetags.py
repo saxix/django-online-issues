@@ -28,3 +28,11 @@ def test_issues_tags_debug_false():
 def test_issues_tags_invalid_renderer():
     with pytest.raises(ValueError, match="Invalid value for RENDERER"):
         issues_tags()
+
+
+@override_settings(ISSUES={"RENDERER": None})
+def test_issues_tags_renderer_none():
+    html = issues_tags()
+    assert "issues.min.js" in html
+    assert "html2canvas.min.js" not in html
+    assert 'data-engine=""' in html

@@ -44,10 +44,10 @@ def check_issues_settings(app_configs: Iterable[AppConfig] | None, **kwargs: Any
     # Check RENDERER
     renderer = settings.ISSUES.get("RENDERER")
     allowed_renderers = ["html2canvas", "dom-to-image"]
-    if renderer and renderer not in allowed_renderers:
+    if renderer is not None and renderer not in allowed_renderers:
         errors.append(
             Error(
-                f"'{renderer}' is not a valid renderer. Must be one of {allowed_renderers}.",
+                f"'{renderer}' is not a valid renderer. Must be one of {allowed_renderers} or None.",
                 id="issues.E005",
             )
         )
