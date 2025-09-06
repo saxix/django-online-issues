@@ -6,8 +6,8 @@ requires = [
 ]
 
 [project]
-name = "django-online-issue"
-description = "Add your description here"
+name = "django-online-issues"
+description = "A reusable Django app for collecting and reporting user-submitted issues (tickets). It provides a view and a form to submit tickets and forwards them to configurable backends like GitLab, GitHub, email, or simply the development console."
 readme = "README.md"
 authors = [
   { name = "Stefano Apostolico", email = "s.apostolico@gmail.com" },

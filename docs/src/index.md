@@ -1,6 +1,6 @@
-# Welcome to Django-Issues
+# Welcome to Django-Online-Issues
 
-**Django Issues** is a reusable Django app for collecting and reporting user-submitted issues (tickets).
+**Django Online Issues** is a reusable Django app for collecting and reporting user-submitted issues (tickets).
 It provides a view and a form to submit tickets and forwards them to configurable backends
 like GitLab, GitHub, email, or simply the development console.
 
@@ -20,7 +20,7 @@ This documentation will guide you through the installation, configuration, and u
 
 ## Getting Started
 
-To get started with `django-issues`, follow these steps:
+To get started with `django-online-issues`, follow these steps:
 
 1.  **Installation**: Read the [Installation guide](installation.md) to install the package.
 2.  **Configuration**: Follow the [Configuration guide](configuration.md) to set up the app in your Django project and configure a backend.
@@ -31,4 +31,4 @@ To get started with `django-issues`, follow these steps:
 -   **Custom Backends**: Learn how to create your own backend to integrate with any service in the [Custom Backends guide](custom_backends.md).
 -   **Testing**: Find out how to run the test suite and what options are available in the [Testing guide](testing.md).
 
-For more information, you can also visit the [GitHub repository](https://github.com/saxix/django-issues).
+For more information, you can also visit the [GitHub repository](https://github.com/saxix/django-online-issues).

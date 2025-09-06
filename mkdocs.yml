@@ -1,7 +1,7 @@
-site_name: Django-Issues
+site_name: Django-Online-Issues
 docs_dir: docs/src
 copyright: Copyright &copy; 2025
-repo_url: https://github.com/saxix/djangp-issues
+repo_url: https://github.com/saxix/django-online-issues
 site_author: saxix
 site_dir: ./~build/docs
 
