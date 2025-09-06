@@ -40,8 +40,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        cfg: [ "d52-py310",
-               "d42-py38" ]
+        cfg: [ "d52-py313",
+               "d42-py310" ]
     env:
       CELERY_BROKER_URL: redis://redis:6379/0
       CELERY_ALWAYS_EAGER: true
