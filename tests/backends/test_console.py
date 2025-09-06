@@ -18,7 +18,6 @@ def backend(rf, settings, admin_user):
 def test_create_ticket(backend: ConsoleBackend, screenshot):
     data = {
         "title": "Test Issue",
-        "url": "http://example.com",
         "type": "bug",
         "description": "This is a test description.",
         "labels": ["bug", "test"],

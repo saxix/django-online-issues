@@ -33,7 +33,6 @@ def test_create(request, backend: GithubBackend, image: str):
         responses.add(responses.POST, "https://api.github.com:443/repos/user/project/issues", json={})
     data = {
         "title": "login issue",
-        "url": "http://example.com",
         "description": "login does no work properly",
         "screenshot": image,
         "type": "bug",

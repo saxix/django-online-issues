@@ -25,7 +25,6 @@ def backend(rf, settings, admin_user) -> EmailBackend:
 def test_create(backend: EmailBackend, mailoutbox, screenshot: str):
     data = {
         "title": "login issue",
-        "url": "http://example.com",
         "description": "login does not work properly.",
         "screenshot": screenshot,
         "type": "bug",

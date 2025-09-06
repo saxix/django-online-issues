@@ -26,7 +26,6 @@ def backend(rf, settings, admin_user):
 def test_create_ticket(backend: DebugBackend, screenshot):
     data: "IssueFormCleanedData" = {
         "title": "Test Issue",
-        "url": "http://example.com",
         "type": "enhancement",
         "description": "This is a test description.",
         "add_screenshot": bool(screenshot),

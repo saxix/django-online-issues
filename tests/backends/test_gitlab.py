@@ -55,7 +55,6 @@ def test_create(request, backend: GitlabBackend, screenshot: str):
         responses.add(responses.POST, "https://gitlab.com/api/v4/projects/74143440/issues", json={})
     data: "IssueFormCleanedData" = {
         "title": "login issue",
-        "url": "http://example.com",
         "description": "login does no work properly",
         "screenshot": screenshot,
         "add_screenshot": bool(screenshot),
