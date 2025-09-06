@@ -1,8 +1,5 @@
 # Django Issues
 
-[![PyPI version](https://badge.fury.io/py/django-issues.svg)](https://badge.fury.io/py/django-issues)
-[![Build Status](https://travis-ci.org/your-user/django-issues.svg?branch=main)](https://travis-ci.org/your-user/django-issues)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [![Test](https://github.com/saxix/django-issues/actions/workflows/test.yml/badge.svg)](https://github.com/saxix/django-issues/actions/workflows/test.yml)
 [![Lint](https://github.com/saxix/django-issues/actions/workflows/lint.yml/badge.svg)](https://github.com/saxix/django-issues/actions/workflows/lint.yml)
