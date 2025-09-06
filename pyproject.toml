@@ -6,7 +6,7 @@ requires = [
 ]
 
 [project]
-name = "django-issues"
+name = "django-online-issue"
 description = "Add your description here"
 readme = "README.md"
 authors = [
