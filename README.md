@@ -4,6 +4,13 @@
 [![Build Status](https://travis-ci.org/your-user/django-issues.svg?branch=main)](https://travis-ci.org/your-user/django-issues)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+[![Test](https://github.com/saxix/django-issues/actions/workflows/test.yml/badge.svg)](https://github.com/saxix/django-issues/actions/workflows/test.yml)
+[![Lint](https://github.com/saxix/django-issues/actions/workflows/lint.yml/badge.svg)](https://github.com/saxix/django-issues/actions/workflows/lint.yml)
+[![codecov](https://codecov.io/github/saxix/django-issues/graph/badge.svg?token=FBUB7HML5S)](https://codecov.io/github/saxix/django-issues)
+[![Documentation](https://github.com/saxix/django-issues/actions/workflows/docs.yml/badge.svg)](https://saxix.github.io/django-issues/)
+[![Pypi](https://badge.fury.io/py/saxix-django-issues.svg)](https://badge.fury.io/py/saxix-django-issues)
+
+
 **Django Issues** is a reusable Django app for collecting and reporting user-submitted issues (tickets).
 It provides a view and a form to submit tickets and forwards them to configurable backends
 like GitLab, GitHub, email, or simply the development console.
