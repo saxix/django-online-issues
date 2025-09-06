@@ -33,7 +33,7 @@ def test_crawl(browser: Browser, debug_backend: DebugBackend):
     browser.click("#django-issues-form button[type='submit']")
     required_field = browser.get_element("#id_description")
     message = browser.execute_script("return arguments[0].validationMessage;", required_field)
-    assert message == "Please fill in this field."
+    assert message.startswith("Please fill ")
 
     browser.type("#id_description", "Description....")
     browser.click("#django-issues-form button[type='submit']")

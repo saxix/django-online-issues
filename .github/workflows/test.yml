@@ -32,19 +32,12 @@ jobs:
   test:
     needs: [ changes ]
     if: needs.changes.outputs.run_tests == 'true'
-    services:
-      redis:
-        image: redis
-
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         cfg: [ "d52-py313",
                "d42-py310" ]
-    env:
-      CELERY_BROKER_URL: redis://redis:6379/0
-      CELERY_ALWAYS_EAGER: true
     steps:
       - uses: actions/checkout@v4
         with:
