@@ -22,16 +22,17 @@ like GitLab, GitHub, email, or simply the development console.
 -   **Screenshot Capture**: Users can attach a screenshot of the current page to the ticket.
 
 
-### Planned (contribution are welcome)
+### Planned (contributions are welcome)
 
 - Jira
 - Azure Devops
 - Redmine
 - Odoo Helpdesk
+- ... 
 
 ## Screenshot
 
-#### In App popup
+#### In App popup (with ap screenshot)
 <img src="docs/_images/popup.png" alt="Popup Screenshot" width="600"/>
 
 #### GitLab Ticket
