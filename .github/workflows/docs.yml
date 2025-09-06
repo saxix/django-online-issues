@@ -19,8 +19,8 @@ on:
       - 'mkdocs.yaml'
       - './github/workflows/docs.yml'
 
-  schedule:
-    - cron: '37 23 * * 2'
+#  schedule:
+#    - cron: '37 23 * * 2'
 
 permissions:
   contents: read
