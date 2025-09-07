@@ -26,9 +26,12 @@
       display: flex;
       flex-direction: column;
       margin: 10px;
-
+      p{
+        margin-bottom: 4px;
+      }
       textarea {
         width: 97%;
+        margin: 0;
       }
 
       select {
@@ -44,7 +47,7 @@
 
       #screenshot-preview-container {
         width: 100%;
-        margin: 10px 0;
+        margin: 2px 0;
         height: 200px;
         transition: opacity 0.3s, visibility 0.3s;
         visibility: hidden;

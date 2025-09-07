@@ -9,7 +9,9 @@ site
 wheels/
 *.egg-info
 *.sqlite
-
+latest_logs
+archived_logs
+junit.xml
 src/issues/version.py
 !.gitignore
 !.github

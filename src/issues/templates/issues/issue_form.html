@@ -16,10 +16,6 @@
 
     {# {{ form.description.label_tag }} #}
     <p> {{ form.description }} {{ form.description.errors }}</p>
-
-    {{ form.url }}
-    {{ form.screenshot }}
-
     <p>
         {{ form.add_screenshot.label_tag }} {{ form.add_screenshot }}
         {# <label for="{{ form.add_screenshot.id_for_label }}">Add screenshot</label> #}
@@ -31,4 +27,5 @@
     </div>
 
     <button type="submit">Submit</button>
+    {{ form.screenshot }}
 </form>

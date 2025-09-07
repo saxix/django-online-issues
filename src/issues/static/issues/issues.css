@@ -27,8 +27,12 @@
   flex-direction: column;
   margin: 10px;
 }
+#django-issues-modal-overlay #django-issues-form-container form p {
+  margin-bottom: 4px;
+}
 #django-issues-modal-overlay #django-issues-form-container form textarea {
   width: 97%;
+  margin: 0;
 }
 #django-issues-modal-overlay #django-issues-form-container form select {
   width: 100%;
@@ -41,7 +45,7 @@
 }
 #django-issues-modal-overlay #django-issues-form-container form #screenshot-preview-container {
   width: 100%;
-  margin: 10px 0;
+  margin: 2px 0;
   height: 200px;
   transition: opacity 0.3s, visibility 0.3s;
   visibility: hidden;
