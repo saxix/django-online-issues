@@ -21,11 +21,11 @@ class IssueAPIView(View):
         try:
             data = json.loads(request.body)
         except json.JSONDecodeError:
-            return JsonResponse({"success": False, "errors": "Invalid JSON"}, status=400)
+            return JsonResponse({"success": False, "errors": "Invalid JSON payload."}, status=400)
 
         form = IssueForm(data)
         if form.is_valid():
             backend = get_backend(request)
             backend.create_ticket(form.cleaned_data)  # type: ignore[arg-type]
-            return JsonResponse({"success": True, "data": form.cleaned_data})
-        return JsonResponse({"success": False, "errors": form.errors}, status=400)
+            return JsonResponse({"success": True, "message": "Ticket created successfully!"})
+        return JsonResponse({"success": False, "errors": form.errors, "message": "Please correct the errors below."})

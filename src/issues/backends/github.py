@@ -7,6 +7,8 @@ from ._base import BaseBackend
 
 
 class Backend(BaseBackend):
+    screenshot_supported = False
+
     def create_ticket(self, cleaned_data: IssueFormCleanedData) -> bool:
         description = self.get_description({**cleaned_data, "screenshot_url": ""})
 

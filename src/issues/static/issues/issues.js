@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const FORM_ID = 'django-issues-form';
     const SCREENSHOT_PREVIEW_CONTAINER_ID = 'screenshot-preview-container';
     const SCREENSHOT_PREVIEW_IMG_ID = 'screenshot-preview-img';
+    const MESSAGE_CONTAINER_ID = 'form-message-container';
+    const ERRORS_CONTAINER_ID = 'form-error-container';
+
     const SCREENSHOT_LIBRARY = script.dataset.engine; // 'html2canvas' or 'dom-to-image'
     const SUBMIT_URL = script.dataset.url;
 
@@ -39,6 +42,21 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function displayMessage(container, message, isError = false) {
+        const target = container.querySelector('.message');
+        target.innerHTML = message;
+        container.style.backgroundColor = isError ? '#f8d7da' : '#d4edda'; // Light red for error, light green for success
+        container.style.color = isError ? '#721c24' : '#155724'; // Dark red for error, dark green for success
+        container.style.border = `1px solid ${isError ? '#f5c6cb' : '#c3e6cb'}`;
+        container.style.display = 'block';
+    }
+
+    function clearMessage(container) {
+        const target = container.querySelector('.message');
+        target.innerHTML = "";
+        container.style.display = 'none';
+    }
+
     const issueOpener = document.getElementById(OPENER_ID);
     if (issueOpener) {
         issueOpener.addEventListener('click', function() {
@@ -69,6 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (formContainer && modalOverlay) {
                             formContainer.innerHTML = response.data;
 
+                            const titleInput = formContainer.querySelector('input[name="title"]');
                             const screenshotInput = formContainer.querySelector('input[name="screenshot"]');
                             const addScreenshotCheckbox = formContainer.querySelector('input[name="add_screenshot"]');
                             const screenshotPreviewContainer = document.getElementById(SCREENSHOT_PREVIEW_CONTAINER_ID);
@@ -95,8 +114,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                 if (addScreenshotCheckbox) addScreenshotCheckbox.closest('p').remove(); // Remove checkbox and its label
                                 if (screenshotPreviewContainer) screenshotPreviewContainer.remove(); // Remove preview container
                             }
-
                             modalOverlay.style.display = 'flex';
+                            titleInput.focus();
                         }
                     })
                     .catch(error => {
@@ -112,7 +131,13 @@ document.addEventListener('DOMContentLoaded', function () {
         if (event.target.id === FORM_ID) {
             event.preventDefault();
 
-            const formData = new FormData(event.target);
+            const form = event.target;
+            const modalOverlay= document.getElementById(MODAL_OVERLAY_ID);
+            const messageContainer = modalOverlay.querySelector(`#${MESSAGE_CONTAINER_ID}`);
+            const errorContainer = modalOverlay.querySelector(`#${ERRORS_CONTAINER_ID}`);
+            if (messageContainer) clearMessage(messageContainer); // Clear previous messages
+
+            const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
 
             // If add_screenshot is not checked, remove screenshot from data
@@ -128,26 +153,48 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(response => {
                 if (response.data.success) {
-                    const modalOverlay = document.getElementById(MODAL_OVERLAY_ID);
-                    if (modalOverlay) {
-                        modalOverlay.style.display = 'none';
-                    }
                     const formContainer = document.getElementById(FORM_CONTAINER_ID);
-                    if (formContainer) {
-                        formContainer.innerHTML = ''; // Clear the content
+                    const form = formContainer.querySelector("form");
+
+                    if (messageContainer) {
+                        // formContainer.innerHTML = '';
+                        form.style.display = 'none';
+                        displayMessage(messageContainer, response.data.message, false);
                     }
-                    alert('Issue submitted successfully!');
+
+                    // Optionally hide modal after a delay for success message to be read
+                    setTimeout(() => {
+                        const modalOverlay = document.getElementById(MODAL_OVERLAY_ID);
+                        if (modalOverlay) {
+                            modalOverlay.style.display = 'none';
+                        }
+                        if (formContainer) {
+                            formContainer.innerHTML = ''; // Clear the content
+                        }
+                        if (messageContainer) clearMessage(messageContainer); // Clear message after hiding modal
+                    }, 3000); // Hide after 3 seconds
+
                 } else {
-                    alert('Error: ' + JSON.stringify(response.data.errors));
+                    // Display error message and form errors
+                    let errorMessage = response.data.message || "An error occurred.";
+                    if (response.data.errors) {
+                        errorMessage += "<br><ul>";
+                        for (const field in response.data.errors) {
+                            errorMessage += `<li><strong>${field}:</strong> ${response.data.errors[field].join(", ")}</li>`;
+                        }
+                        errorMessage += "</ul>";
+                    }
+                    if (errorContainer){
+                        displayMessage(errorContainer, errorMessage, true);
+                    }
                 }
             })
             .catch(error => {
-                if (error.response && error.response.data && error.response.data.errors) {
-                    alert('Error: ' + JSON.stringify(error.response.data.errors));
-                } else {
-                    console.error('Error submitting form:', error);
-                    alert('An unexpected error occurred.');
-                }
+                const errorMessage = error.response && error.response.data && error.response.data.message
+                                     ? error.response.data.message
+                                     : "An unexpected error occurred.";
+                if (messageContainer) displayMessage(messageContainer, errorMessage, true);
+                console.error('Error submitting form:', error);
             });
         }
     });

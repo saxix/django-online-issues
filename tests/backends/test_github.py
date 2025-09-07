@@ -1,9 +1,13 @@
 import os
+from typing import TYPE_CHECKING
 
 import pytest
 import responses
 
 from issues.backends.github import Backend as GithubBackend
+
+if TYPE_CHECKING:
+    from issues.forms import IssueFormCleanedData
 
 
 @pytest.fixture
@@ -31,10 +35,11 @@ def test_create(request, backend: GithubBackend, image: str):
             },
         )
         responses.add(responses.POST, "https://api.github.com:443/repos/user/project/issues", json={})
-    data = {
+    data: "IssueFormCleanedData" = {
         "title": "login issue",
         "description": "login does no work properly",
         "screenshot": image,
+        "add_screenshot": True,
         "type": "bug",
     }
     backend.create_ticket(data)

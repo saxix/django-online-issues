@@ -44,3 +44,8 @@ like GitLab, GitHub, email, or simply the development console.
 
 #### Github Ticket
 <img src="docs/_images/github.png" alt="Popup Screenshot" width="600"/>
+
+
+## Note on Development Process
+
+This project has been developed with the assistance of the Gemini CLI, serving as a personal experimental exploration into the capabilities of AI in software development. While Gemini aided in various development tasks and execution, the overarching design (patterns, modularisation, naming convention) and core implementation decisions were originated and guided by human intuition and expertise.
