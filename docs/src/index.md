@@ -17,6 +17,7 @@ This documentation will guide you through the installation, configuration, and u
 -   **Configurable**: Customize the backend and its options through Django's settings.
 -   **Extensible**: Create your own custom backends to integrate with any issue-tracking system.
 -   **Screenshot Capture**: Users can attach a screenshot of the current page to the ticket, using one of several supported rendering engines (`html2canvas`, `dom-to-image`).
+-   **Enhanced User Feedback**: The issue submission form provides clear, inline feedback for both successful submissions and validation errors, creating a smooth user experience without disruptive alerts.
 
 ## Getting Started
 

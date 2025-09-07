@@ -15,7 +15,7 @@ def backend(rf, settings, admin_user):
     settings.ISSUES = {
         "OPTIONS": {
             "API_TOKEN": os.environ["GITHUB_API_TOKEN"],
-            "GITHUB_PROJECT": os.environ["GITHUB_PROJECT"],
+            "PROJECT": os.environ["GITHUB_PROJECT"],
         }
     }
     req = rf.get("/test/", HTTP_REFERER="/from/")

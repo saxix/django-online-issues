@@ -31,8 +31,9 @@ Below is a list of the available backends and their specific configuration optio
 -   **Description**: Creates an issue in a specified GitHub repository.
 -   **Options**:
     -   `API_TOKEN`: Your GitHub personal access token with appropriate repository permissions. Example: `"ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"`
-    -   `REPOSITORY_OWNER`: The username or organization name that owns the target repository. Example: `"your-org"`
-    -   `REPOSITORY_NAME`: The name of the GitHub repository where issues will be created. Example: `"your-repo"`
+    -   `PROJECT`: The username or organization and project name repository. Example: `"user/project"`
+-   **Note**: This backend does not support screenshot uploads.
+    
 
 ## GitLab Backend
 

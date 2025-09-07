@@ -13,7 +13,7 @@ class Backend(BaseBackend):
         description = self.get_description({**cleaned_data, "screenshot_url": ""})
 
         g = Github(auth=github.Auth.Token(self.get_option("API_TOKEN")))
-        repo = g.get_repo(self.get_option("GITHUB_PROJECT"))
+        repo = g.get_repo(self.get_option("PROJECT"))
         repo.create_issue(
             title=cleaned_data["title"],
             body=description,

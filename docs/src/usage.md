@@ -8,12 +8,11 @@ To display the issue reporting button in your templates, load the `issues` templ
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My App</title>
+    ...
     {% issues_tags %}
 </head>
 <body>
-    <h1>Welcome to my app</h1>
-    <p>Some content...</p>
+    ...
     <a href="#" id="issue-opener">open issue</a>
 </body>
 </html>

@@ -12,6 +12,7 @@ wheels/
 latest_logs
 archived_logs
 junit.xml
+coverage.xml
 src/issues/version.py
 !.gitignore
 !.github
