@@ -3,14 +3,13 @@
 
 [![Test](https://github.com/saxix/django-online-issues/actions/workflows/test.yml/badge.svg)](https://github.com/saxix/django-online-issues/actions/workflows/test.yml)
 [![Lint](https://github.com/saxix/django-online-issues/actions/workflows/lint.yml/badge.svg)](https://github.com/saxix/django-online-issues/actions/workflows/lint.yml)
-[![codecov](https://codecov.io/github/saxix/django-online-issues/graph/badge.svg?token=FBUB7HML5S)](https://codecov.io/github/saxix/django-online-issues)
+[![codecov](https://codecov.io/github/saxix/django-online-issues/graph/badge.svg?token=3ZmxTFfYra)](https://codecov.io/github/saxix/django-online-issues)
 [![Documentation](https://github.com/saxix/django-online-issues/actions/workflows/docs.yml/badge.svg)](https://saxix.github.io/django-online-issues/)
 [![Pypi](https://badge.fury.io/py/saxix-django-online-issues.svg)](https://badge.fury.io/py/saxix-django-online-issues)
 
 
 **Django Online Issues** is a reusable Django app for collecting and reporting user-submitted issues (tickets).
-It provides a view and a form to submit tickets and forwards them to configurable backends
-like GitLab, GitHub, email, or simply the development console.
+It provides a view and a form to submithe development console.
 
 ## Features
 
