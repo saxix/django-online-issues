@@ -19,6 +19,17 @@ This documentation will guide you through the installation, configuration, and u
 -   **Screenshot Capture**: Users can attach a screenshot of the current page to the ticket, using one of several supported rendering engines (`html2canvas`, `dom-to-image`).
 -   **Enhanced User Feedback**: The issue submission form provides clear, inline feedback for both successful submissions and validation errors, creating a smooth user experience without disruptive alerts.
 
+## Screenshots
+
+### In-App Popup
+![Popup Screenshot](./images/popup.png)
+
+### GitLab Ticket
+![GitLab Ticket](./images/gitlab.png)
+
+### GitHub Ticket
+![GitHub Ticket](./images/github.png)
+
 ## Getting Started
 
 To get started with `django-online-issues`, follow these steps:

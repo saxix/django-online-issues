@@ -37,13 +37,13 @@ like GitLab, GitHub, email, or simply the development console.
 ## Screenshot
 
 #### In App popup (with ap screenshot)
-<img src="docs/_images/popup.png" alt="Popup Screenshot" width="600"/>
+<img src="docs/src/images/popup.png" alt="Popup Screenshot" width="600"/>
 
 #### GitLab Ticket
-<img src="docs/_images/gitlab.png" alt="Popup Screenshot" width="600"/>
+<img src="docs/src/images/gitlab.png" alt="Popup Screenshot" width="600"/>
 
 #### Github Ticket
-<img src="docs/_images/github.png" alt="Popup Screenshot" width="600"/>
+<img src="docs/src/images/github.png" alt="Popup Screenshot" width="600"/>
 
 
 ## Note on Development Process
