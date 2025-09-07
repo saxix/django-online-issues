@@ -20,7 +20,7 @@ jobs:
       run_tests: ${{ steps.changes.outputs.run_tests }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - id: changes
         name: Check for file changes
         uses: dorny/paths-filter@0bc4621a3135347011ad047f9ecf449bf72ce2bd # v3.0.0
@@ -39,12 +39,12 @@ jobs:
         cfg: [ "d52-py313",
                "d42-py310" ]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v6
         with:
           version: "latest"
           enable-cache: true
@@ -82,4 +82,4 @@ jobs:
           verbose: false
           token: ${{ secrets.CODECOV_TOKEN }}
           name: codecov-${{env.GITHUB_REF_NAME}}
-          slug: saxix/django-online-issues
+          slug: ${{ github.repository }}
