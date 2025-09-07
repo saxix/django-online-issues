@@ -82,3 +82,4 @@ jobs:
           verbose: false
           token: ${{ secrets.CODECOV_TOKEN }}
           name: codecov-${{env.GITHUB_REF_NAME}}
+          slug: saxix/django-online-issues
