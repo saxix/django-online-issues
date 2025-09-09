@@ -54,10 +54,10 @@ def test_issues_config_getattr():
 
 
 def test_issues_config_wrong_annotation():
-    settings.ISSUES = {"ANNOTATIONS": {"wrror": "issues.utils.get_client_ip"}}
+    settings.ISSUES = {"ANNOTATIONS": {"error": "issues.utils.get_client_ip"}}
     config = IssuesConfig()
-    with pytest.raises(AttributeError):
-        assert config.ANNOTATIONS["get_extra_info"].__name__ == get_client_ip.__name__
+    with pytest.raises(AttributeError, match="Misspelled or unknown annotation 'error'"):
+        assert config.ANNOTATIONS["get_extra_info"]
 
 
 #

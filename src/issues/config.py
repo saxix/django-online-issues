@@ -55,7 +55,7 @@ class IssuesConfig:
                 self._cached["ANNOTATIONS"] = {}
                 for k, v in self._parsed["ANNOTATIONS"].items():
                     if k not in self._ANNOTATIONS:
-                        raise AttributeError(f" 'IssuesConfig' object has no annotation '{k}'")
+                        raise AttributeError(f"Misspelled or unknown annotation '{k}'")
                     if isinstance(v, str) and v:
                         self._cached["ANNOTATIONS"][k] = import_string(v)
                     elif callable(v):
