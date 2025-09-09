@@ -30,6 +30,10 @@ This documentation will guide you through the installation, configuration, and u
 ### GitHub Ticket
 ![GitHub Ticket](./images/github.png)
 
+### GitHubRepo Ticket
+![GitHub Ticket](./images/github_repo.png)
+
+
 ## Getting Started
 
 To get started with `django-online-issues`, follow these steps:
