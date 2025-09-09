@@ -43,7 +43,24 @@ Below is a list of the available backends and their specific configuration optio
     -   `API_TOKEN`: Your GitLab private access token with `api` scope. Example: `"glpat-xxxxxxxxxxxxxxxxxxxx"`
     -   `PROJECT`: The numeric ID or full path of your GitLab project (e.g., `group/project`). Example: `"your-group/your-project"` or `12345`
 
-## Configuration in Django Settings
+## GitHub Repo Backend
+
+    A backend for creating issues on GitHub and uploading screenshots to the repository.
+    It is intended to be used with a dedicated repository for the issues
+
+    This backend requires a GitHub personal access token with the `public_repo` scope for
+    public repositories, or the `repo` scope for private repositories.
+
+
+-   **Path**: `issues.backends.github_repo.Backend`
+-   **Description**: Creates an issue in a specified GitHub repository and uploads screenshots to the repository.
+-   **Options**:
+    -   `API_TOKEN`: Your GitHub personal access token with `public_repo` scope for public repositories, or `repo` scope for private repositories. Example: `"ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"`
+    -   `PROJECT`: The username or organization and project name repository. Example: `"user/project"`
+    -   `SCREENSHOT_REPO_PATH`: The path in the repository where screenshots will be stored. Defaults to `"screenshots/"`.
+    -   `SCREENSHOT_BRANCH`: The branch where screenshots will be stored. Defaults to `"main"`.
+
+### Configuration in Django Settings
 
 To use a backend, you need to configure it in your Django project's `settings.py` file. The `ISSUES_BACKEND` setting should be a dictionary specifying the backend path and its options. For example:
 
@@ -52,10 +69,47 @@ ISSUES_BACKEND = {
     "PATH": "issues.backends.github.Backend",
     "OPTIONS": {
         "API_TOKEN": "your_github_token",
-        "REPOSITORY_OWNER": "your_github_username",
-        "REPOSITORY_NAME": "your_repo_name",
+        "PROJECT": "your_github_username/your_repo_name",
+        "SCREENSHOT_REPO_PATH": "screenshots_folder/",
+        "SCREENSHOT_BRANCH": "develop/",
     }
 }
 ```
+
+### Github Personal Access Token Configuration
+
+If you want to use a Classic Personal Access Token (PAT)
+
+note: In this case, the public_repo scope will appear explicitly in the list.
+
+
+1. Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic).
+1. Click Generate new token → Generate new token (classic).
+1. Give it a descriptive note and set an expiration date. 4
+1. Under Select scopes, check:
+
+- repo → this covers both public and private repositories.
+- If you only want public repositories, you can instead check public_repo.
+
+6. Click Generate token.
+
+
+If you want to use a Fine-grained Personal Access Token
+
+1. Go to GitHub Settings → Developer settings → Personal access tokens → Fine-grained tokens.
+1. Click Generate new token.
+1. Choose:
+
+    - Resource owner (your account or organization).
+
+    - Repository access → pick All repositories or specific ones.
+
+1. Under Repository permissions, set the level you need (e.g., Read/Write for Contents, Metadata, Pull requests, etc.).
+
+    - There is no single public_repo scope here, but you can replicate its effect by giving read/write access only to public repos.
+
+![PAT configuration](./images/gh_token_perms.png)
+
+1. Click Generate token.
 
 **Important**: Avoid hardcoding sensitive information like API tokens directly in your `settings.py` file. Consider using environment variables or a dedicated secrets management solution for production environments.
