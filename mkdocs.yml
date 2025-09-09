@@ -92,8 +92,15 @@ nav:
     - Home: index.md
     - Installation: installation.md
     - Configuration: configuration.md
-    - Usage: usage.md
     - Advanced Configuration: advanced_configuration.md
-    - Backends: backends.md
+    - Usage: usage.md
+    - Backends:
+        - index: backends/index.md
+        - Console: backends/console.md
+        - Debug: backends/debug.md
+        - Email: backends/email.md
+        - GitHub: backends/github.md
+        - GitLab: backends/gitlab.md
+        - GitHub Repo: backends/github_repo.md
     - Custom Backends: custom_backends.md
     - Testing: testing.md
