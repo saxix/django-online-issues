@@ -8,8 +8,8 @@ This backend supports screenshot uploads. The screenshot is uploaded as an attac
 
 ### Options:
 
--   **SERVER_URL**: Your Azure DevOps server URL (e.g., `https://dev.azure.com/your_organization`). Defaults to `https://dev.azure.com`.
--   **PROJECT**: The name of your Azure DevOps project.
+-   **SERVER_URL**: Your Azure DevOps server URL. Defaults to `https://dev.azure.com`.
+-   **PROJECT**: The name of your Azure DevOps organization and project, in the format `organization/project`.
 -   **TOKEN**: Your Azure DevOps Personal Access Token with `Work Items - Read & Write` permissions.
 
 
@@ -21,8 +21,8 @@ This backend supports screenshot uploads. The screenshot is uploaded as an attac
 ISSUES = {
     "BACKEND": "issues.backends.azure_devops.Backend",
     "OPTIONS": {
-        "SERVER_URL": "https://dev.azure.com/your_organization",
-        "PROJECT": "your_project",
+        "SERVER_URL": "https://dev.azure.com",
+        "PROJECT": "your_organization/your_project",
         "TOKEN": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
     }
 }

@@ -12,7 +12,7 @@ from ._base import BaseBackend
 
 
 class Backend(BaseBackend):
-    screenshot_supported = False
+    screenshot_supported = True
 
     def create_ticket(self, cleaned_data: IssueFormCleanedData) -> bool:
         server_url = self.get_option("SERVER_URL", "https://dev.azure.com")
@@ -50,7 +50,12 @@ class Backend(BaseBackend):
         description = self.get_description({**cleaned_data, "screenshot_url": md_url})
         data_issue = [
             {"op": "add", "path": "/fields/System.Title", "from": None, "value": cleaned_data["title"]},
-            {"op": "add", "path": "/fields/System.Description", "from": None, "value": markdown.markdown(description)},
+            {
+                "op": "add",
+                "path": "/fields/System.Description",
+                "from": None,
+                "value": markdown.markdown(description),
+            },
         ]
 
         response = requests.post(

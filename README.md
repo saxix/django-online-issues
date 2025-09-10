@@ -3,7 +3,7 @@
 
 [![Test](https://github.com/saxix/django-online-issues/actions/workflows/test.yml/badge.svg)](https://github.com/saxix/django-online-issues/actions/workflows/test.yml)
 [![Lint](https://github.com/saxix/django-online-issues/actions/workflows/lint.yml/badge.svg)](https://github.com/saxix/django-online-issues/actions/workflows/lint.yml)
-[![codecov](https://codecov.io/github/saxix/django-online-issues/graph/badge.svg?token=3ZmxTFfYra)](https://codecov.io/github/saxix/django-online-issues)
+[![codecov](https://codecov.io/github/saxix/django-online-issues/branch/develop/graph/badge.svg?token=3ZmxTFfYra)](https://codecov.io/github/saxix/django-online-issues)
 [![Documentation](https://github.com/saxix/django-online-issues/actions/workflows/docs.yml/badge.svg)](https://saxix.github.io/django-online-issues/)
 [![Pypi](https://badge.fury.io/py/django-online-issues.svg)](https://badge.fury.io/py/saxix-django-online-issues)
 
@@ -15,6 +15,7 @@ It provides a view and a form to submithe development console.
 
 -   **Easy Integration**: Seamlessly add a ticketing system to your Django project.
 -   **Multiple Backends**: Send tickets to various platforms. Built-in backends include:
+    -   Azure DevOps
     -   Console (default)
     -   Email
     -   GitLab
@@ -28,7 +29,6 @@ It provides a view and a form to submithe development console.
 ### Planned (contributions are welcome)
 
 - Jira
-- Azure Devops
 - Redmine
 - Odoo Helpdesk
 - ...

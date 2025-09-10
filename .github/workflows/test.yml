@@ -76,7 +76,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: pytest-results-${{ matrix.cfg }}
-          path: junit-${{ matrix.cfg }}.xml
+          path: junit.xml
         if: ${{ always() }}
 
       - name: Upload coverage to Codecov
