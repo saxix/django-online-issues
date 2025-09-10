@@ -38,20 +38,22 @@ def backend(rf, settings, admin_user):
 @pytest.mark.online
 def test_create(request, backend: AzureDevopsBackend, screenshot: str):
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    project = backend.get_option("PROJECT")  # encode spaces if any
+
     if request.node.get_closest_marker("withoutresponses") is None:
         responses.add(
             responses.POST,
-            "https://dev.azure.com/hanarero/Test/_apis/wit/workitems/$issue?api-version=7.1-preview.3",
+            f"https://dev.azure.com/{project}/_apis/wit/workitems/$issue?api-version=7.1-preview.3",
             json={"id": 123},
         )
         responses.add(
             responses.POST,
-            f"https://dev.azure.com/hanarero/Test/_apis/wit/attachments?fileName=issue-{timestamp}.png&api-version=7.1-preview.3",
+            f"https://dev.azure.com/{project}/_apis/wit/attachments?fileName=issue-{timestamp}.png&api-version=7.1-preview.3",
             json={"url": "https://store/image.png"},
         )
         responses.add(
             responses.PATCH,
-            "https://dev.azure.com/hanarero/Test/_apis/wit/workitems/123?api-version=7.1-preview.3",
+            f"https://dev.azure.com/{project}/_apis/wit/workitems/123?api-version=7.1-preview.3",
             json={"url": "https://store/image.png"},
         )
 
