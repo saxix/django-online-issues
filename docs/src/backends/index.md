@@ -4,6 +4,7 @@ Django Issues allows you to integrate with various issue tracking systems throug
 
 Below is a list of the available backends and their specific configuration options:
 
+- [Azure DevOps Backend](./azure_devops.md)
 - [Console Backend](./console.md)
 - [Debug Backend](./debug.md)
 - [Email Backend](./email.md)

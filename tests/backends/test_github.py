@@ -14,8 +14,8 @@ if TYPE_CHECKING:
 def backend(rf, settings, admin_user):
     settings.ISSUES = {
         "OPTIONS": {
-            "API_TOKEN": os.environ["GITHUB_API_TOKEN"],
-            "PROJECT": os.environ["GITHUB_PROJECT"],
+            "API_TOKEN": os.environ.get("GITHUB_API_TOKEN", "token"),
+            "PROJECT": os.environ.get("GITHUB_PROJECT", "user/project"),
         }
     }
     req = rf.get("/test/", HTTP_REFERER="/from/")

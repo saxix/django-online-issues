@@ -21,8 +21,8 @@ def screenshot(request, image):
 def backend(rf, settings, admin_user):
     settings.ISSUES = {
         "OPTIONS": {
-            "API_TOKEN": os.environ["GITLAB_API_TOKEN"],
-            "PROJECT": os.environ["GITLAB_PROJECT"],
+            "API_TOKEN": os.environ.get("GITLAB_API_TOKEN", "token"),
+            "PROJECT": os.environ.get("GITLAB_PROJECT", "user/project"),
         }
     }
     req = rf.get("/test/", HTTP_REFERER="/from/")

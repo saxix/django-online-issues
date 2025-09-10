@@ -6,6 +6,8 @@ from issues.forms import IssueFormCleanedData
 if TYPE_CHECKING:
     from issues.types import AuthenticatedHttpRequest
 
+not_provided = object()
+
 
 class IssueData(TypedDict):
     title: str
@@ -19,13 +21,18 @@ class BaseBackend:
     def __init__(self, request: "AuthenticatedHttpRequest") -> None:
         self.request = request
 
-    def get_option(self, name: str) -> Any:
+    def get_issue_types(self) -> list[str]:
+        return self.get_option("TYPES")  # type: ignore[no-any-return]
+
+    def get_option(self, name: str, default: Any = not_provided) -> Any:
         from issues.config import CONFIG
 
         try:
             return CONFIG.OPTIONS[name]
         except KeyError as e:
-            raise IssueError("Issues backend Improperly configured") from e
+            if default == not_provided:
+                raise IssueError("Issues backend Improperly configured") from e
+            return default
 
     def get_context(self) -> dict[str, Any]:
         from issues.config import CONFIG
