@@ -44,6 +44,9 @@ It provides a view and a form to submithe development console.
 #### Github Ticket
 <img src="docs/src/images/github.png" alt="Popup Screenshot" width="600"/>
 
+#### Azure Ticket
+<img src="docs/src/images/azure.png" alt="Popup Screenshot" width="600"/>
+
 
 ## Note on Development Process
 
