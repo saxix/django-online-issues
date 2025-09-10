@@ -33,6 +33,7 @@ class IssuesConfig:
         "BACKEND": "issues.backends.console.Backend",
         "RENDERER": "html2canvas",  # or rasterizeHTML or dom-to-image
         "ISSUE_TEMPLATE": ISSUE_TEMPLATE,
+        "TYPES": ("bug", "enhancement", "feature", "suggestion"),
         "OPTIONS": {},
     }
 

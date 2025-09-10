@@ -45,7 +45,6 @@ optional-dependencies.github = [
 optional-dependencies.gitlab = [
   "python-gitlab>=6.3",
 ]
-
 urls.Documentation = "https://github.com/saxix/django-issues"
 urls.Homepage = "https://github.com/saxix/django-issues"
 
@@ -90,6 +89,7 @@ type-check = [
   "django-stubs[compatible-mypy]",
   "mypy",
   "types-markdown",
+  "types-requests",
 ]
 
 [tool.hatch]

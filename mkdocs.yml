@@ -98,6 +98,7 @@ nav:
         - index: backends/index.md
         - Console: backends/console.md
         - Debug: backends/debug.md
+        - Azure Devops: backends/azure_devops.md
         - Email: backends/email.md
         - GitHub: backends/github.md
         - GitLab: backends/gitlab.md
