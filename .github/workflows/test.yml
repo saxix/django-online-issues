@@ -31,7 +31,7 @@ jobs:
 
   test:
     needs: [ changes ]
-    if: needs.changes.outputs.run_tests == 'true'
+    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.run_tests == 'true'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -87,7 +87,7 @@ jobs:
           fail_ci_if_error: true
           flags: unittests
           files: ./coverage.xml
-          verbose: false
+          verbose: true
           token: ${{ secrets.CODECOV_TOKEN }}
           name: codecov-${{env.GITHUB_REF_NAME}}
           slug: ${{ github.repository }}
