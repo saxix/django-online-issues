@@ -10,7 +10,9 @@ if typing.TYPE_CHECKING:
     from issues.forms import IssueFormCleanedData
 
 
-_ISSUES = {
+@pytest.fixture
+def backend(rf, settings, admin_user):
+    settings.ISSUES = {
     "BACKEND": "issues.backends.taiga",
     "TYPES": dict([x.split(",") for x in os.environ.get("TAIGA_ISSUES", "Bug,13;CR,999").split(";")]),
     "OPTIONS": {
@@ -19,11 +21,6 @@ _ISSUES = {
         "PROJECT_ID": int(os.environ.get("TAIGA_PROJECT_ID", "999")),
     },
 }
-
-
-@pytest.fixture
-def backend(rf, settings, admin_user):
-    settings.ISSUES = _ISSUES
     req = rf.get("/test/", HTTP_REFERER="/from/")
     req.user = admin_user
     return TaigaBackend(req)
@@ -31,7 +28,7 @@ def backend(rf, settings, admin_user):
 @pytest.mark.online
 @pytest.mark.taiga
 def test_create_ticket_without_screenshot(request, backend: TaigaBackend, image: str):
-    _base_url = _ISSUES["OPTIONS"]['API_URL'] + "/issues"
+    _base_url = backend.get_option("API_URL") + "/issues"
     responses.add(
         responses.POST,
         _base_url,
@@ -44,23 +41,22 @@ def test_create_ticket_without_screenshot(request, backend: TaigaBackend, image:
         "description": "example: login does no work properly",
         "screenshot": "",
         "add_screenshot": False,
-        "type": list(_ISSUES["TYPES"].items())[0][1],
+        "type": backend.get_issue_choices()[0][1],
     }
     assert backend.create_ticket(data) is True
 
 @pytest.mark.online
 @pytest.mark.taiga
 def test_create_ticket_with_screenshot(request, backend: TaigaBackend, image: str):
-    _base_url = _ISSUES["OPTIONS"]['API_URL'] + "/issues"
     responses.add(
         responses.POST,
-        _base_url,
+        backend.get_option("API_URL") + "/issues",
         json={"id": 1, "subject": "login issue"},
         status=201,
     )
     responses.add(
         responses.POST,
-        f"{_base_url}/attachments",
+        backend.get_option("API_URL") + "/issues/attachments",
         json={},
         status=201,
     )
@@ -70,6 +66,6 @@ def test_create_ticket_with_screenshot(request, backend: TaigaBackend, image: st
         "description": "example: login does no work properly",
         "screenshot": image,
         "add_screenshot": True,
-        "type": list(_ISSUES["TYPES"].items())[0][1],
+        "type": backend.get_issue_choices()[0][1],
     }
     assert backend.create_ticket(data) is True
