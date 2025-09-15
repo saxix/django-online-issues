@@ -1,12 +1,12 @@
 import os
-import typing
+from typing import TYPE_CHECKING
 
 import pytest
 import responses
 
 from issues.backends.taiga import Backend as TaigaBackend
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from issues.forms import IssueFormCleanedData
 
 
