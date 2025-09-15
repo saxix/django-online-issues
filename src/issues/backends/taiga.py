@@ -13,13 +13,17 @@ if typing.TYPE_CHECKING:
 class Backend(BaseBackend):
     screenshot_supported = True
 
+    def get_issue_choices(self) -> list[tuple[str, str]]:
+        from issues.config import CONFIG
+
+        return [x.split(",") for x in CONFIG.TYPES.split(";")]
+
     def create_ticket(self, cleaned_data: "IssueFormCleanedData") -> bool:
         description = self.get_description({**cleaned_data, "screenshot_url": ""})
 
         api_url = self.get_option("API_URL", "https://api.taiga.io/api/v1")
         api_token = self.get_option("API_TOKEN")
         project = int(self.get_option("PROJECT_ID"))
-        issue_type = int(self.get_option("ISSUE_TYPE_ID"))
 
         screenshot = cleaned_data["screenshot"]
 
@@ -31,7 +35,7 @@ class Backend(BaseBackend):
             "project": project,
             "subject": cleaned_data["title"],
             "description": description,
-            "type": issue_type,
+            "type": cleaned_data["type"],
         }
         response = requests.post(f"{api_url}/issues", headers=headers, json=data, timeout=10)
         response.raise_for_status()
