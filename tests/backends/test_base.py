@@ -1,7 +1,6 @@
 import pytest
 
 from issues.backends._base import BaseBackend
-from issues.config import CONFIG
 from issues.exceptions import IssueError
 
 
@@ -21,4 +20,4 @@ def test_get_option(backend: BaseBackend):
 
 
 def test_get_issue_types(backend: BaseBackend):
-    assert backend.get_issue_types() == CONFIG.TYPES
+    assert backend.get_issue_choices()

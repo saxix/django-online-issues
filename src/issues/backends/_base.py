@@ -21,10 +21,10 @@ class BaseBackend:
     def __init__(self, request: "AuthenticatedHttpRequest") -> None:
         self.request = request
 
-    def get_issue_types(self) -> list[str]:
+    def get_issue_choices(self) -> list[tuple[str, str]]:
         from issues.config import CONFIG
 
-        return CONFIG.TYPES  # type: ignore[no-any-return]
+        return [(issue_type, issue_type) for issue_type in CONFIG.TYPES]
 
     def get_option(self, name: str, default: Any = not_provided) -> Any:
         from issues.config import CONFIG

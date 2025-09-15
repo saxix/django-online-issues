@@ -40,7 +40,7 @@ def get_user_agent(request: HttpRequest) -> str:
 
 def get_user(request: "AuthenticatedHttpRequest") -> str:
     if request.user.is_authenticated:
-        return request.user.email  # type: ignore[no-any-return]
+        return request.user.email
     return "N/A"
 
 

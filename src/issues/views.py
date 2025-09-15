@@ -14,7 +14,8 @@ if TYPE_CHECKING:
 
 class IssueAPIView(View):
     def get(self, request: "AuthenticatedHttpRequest", *args: Any, **kwargs: Any) -> HttpResponse:
-        form = IssueForm()
+        backend = get_backend(request)
+        form = IssueForm(backend=backend)
         return render(request, "issues/issue_form.html", {"form": form})
 
     def post(self, request: "AuthenticatedHttpRequest", *args: Any, **kwargs: Any) -> JsonResponse:
@@ -23,9 +24,9 @@ class IssueAPIView(View):
         except json.JSONDecodeError:
             return JsonResponse({"success": False, "errors": "Invalid JSON payload."}, status=400)
 
-        form = IssueForm(data)
+        backend = get_backend(request)
+        form = IssueForm(data, backend=backend)
         if form.is_valid():
-            backend = get_backend(request)
             backend.create_ticket(form.cleaned_data)  # type: ignore[arg-type]
             return JsonResponse({"success": True, "message": "Ticket created successfully!"})
         return JsonResponse({"success": False, "errors": form.errors, "message": "Please correct the errors below."})
