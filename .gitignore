@@ -18,3 +18,4 @@ src/issues/version.py
 !.github
 !tests/.coveragerc
 !.python-version
+downloaded_files

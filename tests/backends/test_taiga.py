@@ -32,15 +32,16 @@ def backend(rf, settings, admin_user):
 @pytest.mark.online
 @pytest.mark.taiga
 def test_create_ticket_with_screenshot(request, backend: TaigaBackend, image: str):
+    _base_url = _ISSUES["OPTIONS"]['API_URL'] + "/issues"
     responses.add(
         responses.POST,
-        f"{_ISSUES["OPTIONS"]['API_URL']}/issues",
+        _base_url,
         json={"id": 1, "subject": "login issue"},
         status=201,
     )
     responses.add(
         responses.POST,
-        f"{_ISSUES["OPTIONS"]['API_URL']}/issues/attachments",
+        f"{_base_url}/attachments",
         json={},
         status=201,
     )
