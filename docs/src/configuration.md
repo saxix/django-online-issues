@@ -11,7 +11,7 @@ INSTALLED_APPS = [
 ]
 ```
 
-2. Include the `django-issues` URLs in your main `urls.py` file:
+2. Include the `django-online-issues` URLs in your main `urls.py` file:
 
 ```python
 # urls.py

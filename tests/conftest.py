@@ -56,12 +56,16 @@ def pytest_collection_modifyitems(config, items):
         # --online given in cli
         skip_gitlab = pytest.mark.skip(reason="GITLAB_API_TOKEN is not available")
         skip_github = pytest.mark.skip(reason="GITHUB_API_TOKEN is not available")
+        skip_taiga = pytest.mark.skip(reason="TAIGA_API_TOKEN is not available")
 
         gitlab_available = "GITLAB_API_TOKEN" in os.environ and "GITLAB_PROJECT" in os.environ
         github_available = "GITHUB_API_TOKEN" in os.environ and "GITHUB_PROJECT" in os.environ
+        taiga_available = "TAIGA_API_TOKEN" in os.environ and "TAIGA_PROJECT_ID" in os.environ
 
         for item in items:
             if "gitlab" in item.keywords and not gitlab_available:
                 item.add_marker(skip_gitlab)
             if "github" in item.keywords and not github_available:
                 item.add_marker(skip_github)
+            if "taiga" in item.keywords and not taiga_available:
+                item.add_marker(skip_taiga)
