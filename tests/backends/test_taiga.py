@@ -28,6 +28,25 @@ def backend(rf, settings, admin_user):
     req.user = admin_user
     return TaigaBackend(req)
 
+@pytest.mark.online
+@pytest.mark.taiga
+def test_create_ticket_without_screenshot(request, backend: TaigaBackend, image: str):
+    _base_url = _ISSUES["OPTIONS"]['API_URL'] + "/issues"
+    responses.add(
+        responses.POST,
+        _base_url,
+        json={"id": 1, "subject": "login issue"},
+        status=201,
+    )
+
+    data: "IssueFormCleanedData" = {
+        "title": "test taiga integration",
+        "description": "example: login does no work properly",
+        "screenshot": "",
+        "add_screenshot": False,
+        "type": list(_ISSUES["TYPES"].items())[0][1],
+    }
+    assert backend.create_ticket(data) is True
 
 @pytest.mark.online
 @pytest.mark.taiga
