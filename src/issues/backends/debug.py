@@ -4,13 +4,13 @@ from ..forms import IssueFormCleanedData
 from ._base import BaseBackend
 
 if TYPE_CHECKING:
-    from ..types import AuthenticatedHttpRequest
+    from django.http import HttpRequest
 
 
 class Backend(BaseBackend):
     tickets: list[dict[str, Any]] = []
 
-    def __init__(self, request: "AuthenticatedHttpRequest") -> None:
+    def __init__(self, request: "HttpRequest") -> None:
         super().__init__(request)
         Backend.tickets = []
 

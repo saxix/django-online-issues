@@ -51,3 +51,26 @@ ISSUES = {
 
 **Important**: Avoid hardcoding sensitive information like API tokens directly in your `settings.py` file. Consider
 using environment variables or a dedicated secrets management solution for production environments.
+
+### Screenshot Renderer
+
+The `RENDERER` option allows you to choose the JavaScript library used to capture screenshots of the web page when a user submits an issue. You can set this option within the `ISSUES` dictionary in your `settings.py`.
+
+The available options are:
+
+-   `"html2canvas"` (Default): Uses the [html2canvas](https://html2canvas.hertzen.com/) library. It is the default option and is generally reliable for most use cases.
+-   `"dom-to-image"`: Uses the [dom-to-image](https://github.com/tsayen/dom-to-image) library. This can be a good alternative if you encounter issues with `html2canvas`.
+-   `None`: Disables screenshot functionality. No screenshot will be taken or included in the issue.
+
+**Example Configuration:**
+
+```python
+# settings.py
+
+ISSUES = {
+    # ... other settings
+    "RENDERER": "dom-to-image",
+}
+```
+
+If the `RENDERER` option is not specified, it defaults to `"html2canvas"`. If you wish to disable screenshots, you must explicitly set it to `None`.

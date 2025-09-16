@@ -4,7 +4,7 @@ from issues.exceptions import IssueError
 from issues.forms import IssueFormCleanedData
 
 if TYPE_CHECKING:
-    from issues.types import AuthenticatedHttpRequest
+    from django.http import HttpRequest
 
 not_provided = object()
 
@@ -18,7 +18,7 @@ class IssueData(TypedDict):
 class BaseBackend:
     screenshot_supported: bool = True
 
-    def __init__(self, request: "AuthenticatedHttpRequest") -> None:
+    def __init__(self, request: "HttpRequest") -> None:
         self.request = request
 
     def get_issue_choices(self) -> list[tuple[str, str]]:

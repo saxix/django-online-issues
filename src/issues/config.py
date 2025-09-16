@@ -51,7 +51,7 @@ class IssuesConfig:
             raise AttributeError(f" 'IssuesConfig' object has no attribute '{name}'")
         if name not in self._cached:
             if name == "BACKEND":
-                self._cached[name] = import_string(settings.ISSUES["BACKEND"])
+                self._cached[name] = import_string(self._parsed["BACKEND"])
             elif name == "ANNOTATIONS":
                 self._cached["ANNOTATIONS"] = {}
                 for k, v in self._parsed["ANNOTATIONS"].items():
