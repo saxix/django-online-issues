@@ -16,7 +16,7 @@ class Backend(BaseBackend):
     def get_issue_choices(self) -> list[tuple[str, str]]:
         from issues.config import CONFIG
 
-        return list((x, y) for x, y in CONFIG.TYPES.items())
+        return list(CONFIG.TYPES.items())
 
     def create_ticket(self, cleaned_data: "IssueFormCleanedData") -> bool:
         description = self.get_description({**cleaned_data, "screenshot_url": ""})
@@ -24,6 +24,7 @@ class Backend(BaseBackend):
         api_url = self.get_option("API_URL", "https://api.taiga.io/api/v1")
         api_token = self.get_option("API_TOKEN")
         project = int(self.get_option("PROJECT_ID"))
+        tags = self.get_option("TAGS", [])
 
         screenshot = cleaned_data["screenshot"]
 
@@ -36,6 +37,7 @@ class Backend(BaseBackend):
             "subject": cleaned_data["title"],
             "description": description,
             "type": cleaned_data["type"],
+            "tags": tags,
         }
         response = requests.post(f"{api_url}/issues", headers=headers, json=data, timeout=10)
         response.raise_for_status()
