@@ -103,5 +103,6 @@ nav:
         - GitHub: backends/github.md
         - GitLab: backends/gitlab.md
         - GitHub Repo: backends/github_repo.md
+        - Taiga: backends/taiga.md
     - Custom Backends: custom_backends.md
     - Testing: testing.md
