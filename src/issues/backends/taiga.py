@@ -1,12 +1,12 @@
 import base64
 import io
-import typing
+from typing import TYPE_CHECKING
 
 import requests
 
 from ._base import BaseBackend
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from ..forms import IssueFormCleanedData
 
 
@@ -16,7 +16,7 @@ class Backend(BaseBackend):
     def get_issue_choices(self) -> list[tuple[str, str]]:
         from issues.config import CONFIG
 
-        return [(x,y) for x,y in CONFIG.TYPES.items()]
+        return list((x, y) for x, y in CONFIG.TYPES.items())
 
     def create_ticket(self, cleaned_data: "IssueFormCleanedData") -> bool:
         description = self.get_description({**cleaned_data, "screenshot_url": ""})
