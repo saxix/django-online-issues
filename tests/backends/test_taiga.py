@@ -13,17 +13,19 @@ if TYPE_CHECKING:
 @pytest.fixture
 def backend(rf, settings, admin_user):
     settings.ISSUES = {
-    "BACKEND": "issues.backends.taiga",
-    "TYPES": dict([x.split(",") for x in os.environ.get("TAIGA_ISSUES", "Bug,13;CR,999").split(";")]),
-    "OPTIONS": {
-        "API_URL": os.environ.get("TAIGA_URL", "https://api.taiga.io"),
-        "API_TOKEN": os.environ.get("TAIGA_API_TOKEN", "token"),
-        "PROJECT_ID": int(os.environ.get("TAIGA_PROJECT_ID", "999")),
-    },
-}
+        "BACKEND": "issues.backends.taiga",
+        "TYPES": dict([x.split(",") for x in os.environ.get("TAIGA_ISSUES", "Bug,13;CR,999").split(";")]),
+        "OPTIONS": {
+            "API_URL": os.environ.get("TAIGA_URL", "https://api.taiga.io"),
+            "API_TOKEN": os.environ.get("TAIGA_API_TOKEN", "token"),
+            "PROJECT_ID": int(os.environ.get("TAIGA_PROJECT_ID", "999")),
+            "TAGS": os.environ.get("TAIGA_TAGS", "").split(","),
+        },
+    }
     req = rf.get("/test/", HTTP_REFERER="/from/")
     req.user = admin_user
     return TaigaBackend(req)
+
 
 @pytest.mark.online
 @pytest.mark.taiga
@@ -44,6 +46,7 @@ def test_create_ticket_without_screenshot(request, backend: TaigaBackend, image:
         "type": backend.get_issue_choices()[0][1],
     }
     assert backend.create_ticket(data) is True
+
 
 @pytest.mark.online
 @pytest.mark.taiga

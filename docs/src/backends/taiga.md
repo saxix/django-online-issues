@@ -18,6 +18,8 @@ See [How to list issue types via API](https://docs.taiga.io/api.html#issue-types
 
 -   **PROJECT**: The numeric ID of your Taiga project (see the admin to get ID or use [API](https://docs.taiga.io/api.html#projects-get) ).
 
+-   **TAGS**: The list of tags for the ticket
+
 ### Example:
 
 ```python
@@ -28,7 +30,11 @@ ISSUES = {
     "TYPES": {"Bug": 123, "Enhancement": 124},
     "OPTIONS": {
         "API_TOKEN": "xxxxxxxxxxxxxxxxxxxx",
-        "PROJECT_ID": 123
+        "PROJECT_ID": 123,
+        "TAGS": [
+            "online",
+            "triage"
+        ]
     }
 }
 ```
