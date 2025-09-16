@@ -33,6 +33,6 @@ def issues_tags() -> str:
 <link rel="stylesheet" href="{css_url}">
 {renderer_url_tag}
 <script src="{static_url}issues/axios{suffix}.js"></script>
-<script id="django-issues-script" src="{js_url}" data-engine="{engine}" data-url={url}></script>
+<script id="django-issues-script" src="{js_url}" data-engine="{engine}" data-url="{url}"></script>
 """
     return mark_safe(html)  # noqa: S308
