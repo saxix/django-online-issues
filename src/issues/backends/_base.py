@@ -42,10 +42,10 @@ class BaseBackend:
         data = {
             "extras": {},
             "url": self.request.META.get("HTTP_REFERER", "N/A"),
-            "user": CONFIG.ANNOTATIONS["get_user"](self.request),
-            "user_agent": CONFIG.ANNOTATIONS["get_user_agent"](self.request),
-            "version": CONFIG.ANNOTATIONS["get_version"](self.request),
-            "remote_ip": CONFIG.ANNOTATIONS["get_client_ip"](self.request),
+            "user": CONFIG.get_annotation("get_user", self.request),
+            "user_agent": CONFIG.get_annotation("get_user_agent", self.request),
+            "version": CONFIG.get_annotation("get_version", self.request),
+            "remote_ip": CONFIG.get_annotation("get_client_ip", self.request),
         }
         data["extras"] = CONFIG.ANNOTATIONS["get_extra_info"](self.request, data)
         return data

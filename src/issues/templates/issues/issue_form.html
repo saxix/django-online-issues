@@ -1,9 +1,9 @@
-<div id="form-message-container" style="margin-bottom: 10px; padding: 10px; border-radius: 5px;">
-    <div class="message"></div>
+<div id="django-issues-form-message-container" style="margin-bottom: 10px; padding: 10px; border-radius: 5px;">
+    <div class="django-issues-message"></div>
 </div>
 <form id="django-issues-form" method="post">
-    <div id="form-error-container" style="margin-bottom: 10px; padding: 10px; border-radius: 5px;">
-        <div class="message"></div>
+    <div id="django-issues-form-error-container" style="margin-bottom: 10px; padding: 10px; border-radius: 5px;">
+        <div class="django-issues-message"></div>
     </div>
     {% csrf_token %}
     {{ form.non_field_errors }}
@@ -22,8 +22,8 @@
         {{ form.add_screenshot.errors }}
     </p>
 
-    <div id="screenshot-preview-container">
-        <img id="screenshot-preview-img" style="max-width: 100%;">
+    <div id="django-issues-screenshot-preview-container">
+        <img id="django-issues-screenshot-preview-img" alt="screenshot preview" style="max-width: 100%;" src="">
     </div>
 
     <button type="submit">Submit</button>

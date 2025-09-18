@@ -87,7 +87,7 @@ def test_crawl_novalidate(browser: Browser, config: TestConfig):
 
     browser.select_option_by_text("select#id_type", "enhancement")
     browser.click("#django-issues-form button[type='submit']")
-    browser.assert_element_visible("#form-error-container")
-    browser.find_non_empty_text("#form-error-container .message")
+    browser.assert_element_visible("#django-issues-form-error-container")
+    browser.find_non_empty_text("#django-issues-form-error-container .django-issues-message")
 
     browser.type("#id_description", "Description....")

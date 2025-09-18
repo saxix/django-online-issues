@@ -1,24 +1,21 @@
 import json
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views import View
 
 from .backends import get_backend
 from .forms import IssueForm
 
-if TYPE_CHECKING:
-    from .types import AuthenticatedHttpRequest
-
 
 class IssueAPIView(View):
-    def get(self, request: "AuthenticatedHttpRequest", *args: Any, **kwargs: Any) -> HttpResponse:
+    def get(self, request: "HttpRequest", *args: Any, **kwargs: Any) -> HttpResponse:
         backend = get_backend(request)
         form = IssueForm(backend=backend)
         return render(request, "issues/issue_form.html", {"form": form})
 
-    def post(self, request: "AuthenticatedHttpRequest", *args: Any, **kwargs: Any) -> JsonResponse:
+    def post(self, request: "HttpRequest", *args: Any, **kwargs: Any) -> JsonResponse:
         try:
             data = json.loads(request.body)
         except json.JSONDecodeError:

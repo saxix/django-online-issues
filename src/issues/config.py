@@ -4,6 +4,7 @@ from typing import Any
 from django.conf import settings
 from django.core.signals import setting_changed
 from django.dispatch import receiver
+from django.http import HttpRequest
 from django.utils.module_loading import import_string
 
 ISSUE_TEMPLATE = """
@@ -18,6 +19,7 @@ ISSUE_TEMPLATE = """
 
 {screenshot_url}
 """
+ALLOWED_RENDERERS = ["html2canvas", "dom-to-image", "html2canvas-pro"]
 
 
 class IssuesConfig:
@@ -31,7 +33,7 @@ class IssuesConfig:
     }
     _DEFAULTS = {
         "BACKEND": "issues.backends.console.Backend",
-        "RENDERER": "html2canvas",  # or rasterizeHTML or dom-to-image
+        "RENDERER": "html2canvas",  # or  dom-to-image
         "ISSUE_TEMPLATE": ISSUE_TEMPLATE,
         "TYPES": ("bug", "enhancement", "feature", "suggestion"),
         "OPTIONS": {},
@@ -46,6 +48,22 @@ class IssuesConfig:
     def __repr__(self) -> str:
         return str(self._parsed)
 
+    def load_annotations(self) -> None:
+        self._cached["ANNOTATIONS"] = {}
+        for k, v in self._parsed["ANNOTATIONS"].items():
+            if k not in self._ANNOTATIONS:
+                raise AttributeError(f"Misspelled or unknown annotation '{k}'")
+            if isinstance(v, str) and v:
+                self._cached["ANNOTATIONS"][k] = import_string(v)
+            elif callable(v):
+                self._cached["ANNOTATIONS"][k] = v
+            else:
+                raise AttributeError(f" 'IssuesConfig' object has no annotation '{k}'")
+
+    def get_annotation(self, name: str, request: HttpRequest) -> Any:
+        self.load_annotations()
+        return self._cached["ANNOTATIONS"].get(name)(request)
+
     def __getattr__(self, name: str) -> Any:
         if name not in self._parsed:
             raise AttributeError(f" 'IssuesConfig' object has no attribute '{name}'")
@@ -53,16 +71,7 @@ class IssuesConfig:
             if name == "BACKEND":
                 self._cached[name] = import_string(self._parsed["BACKEND"])
             elif name == "ANNOTATIONS":
-                self._cached["ANNOTATIONS"] = {}
-                for k, v in self._parsed["ANNOTATIONS"].items():
-                    if k not in self._ANNOTATIONS:
-                        raise AttributeError(f"Misspelled or unknown annotation '{k}'")
-                    if isinstance(v, str) and v:
-                        self._cached["ANNOTATIONS"][k] = import_string(v)
-                    elif callable(v):
-                        self._cached["ANNOTATIONS"][k] = v
-                    else:
-                        raise AttributeError(f" 'IssuesConfig' object has no annotation '{k}'")
+                self.load_annotations()
             else:
                 self._cached[name] = self._parsed[name]
         return self._cached[name]

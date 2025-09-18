@@ -1,9 +1,6 @@
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from django.http import HttpRequest, HttpResponseRedirect
-
-if TYPE_CHECKING:
-    from issues.types import AuthenticatedHttpRequest
 
 
 class HttpResponseRedirectToReferrer(HttpResponseRedirect):
@@ -38,9 +35,9 @@ def get_user_agent(request: HttpRequest) -> str:
     return str(ua_string)
 
 
-def get_user(request: "AuthenticatedHttpRequest") -> str:
+def get_user(request: "HttpRequest") -> str:
     if request.user.is_authenticated:
-        return request.user.email
+        return request.user.email  # noqa
     return "N/A"
 
 

@@ -34,6 +34,7 @@ urlpatterns = [
 
 ISSUES = {
     "BACKEND": "issues.backends.gitlab.Backend",
+    "RENDERER": "html2canvas-pro",
     "OPTIONS": {
         "API_TOKEN": "your_gitlab_private_access_token",
         "PROJECT": "your_project_id_or_path",
@@ -60,6 +61,7 @@ The available options are:
 
 -   `"html2canvas"` (Default): Uses the [html2canvas](https://html2canvas.hertzen.com/) library. It is the default option and is generally reliable for most use cases.
 -   `"dom-to-image"`: Uses the [dom-to-image](https://github.com/tsayen/dom-to-image) library. This can be a good alternative if you encounter issues with `html2canvas`.
+-   `"html2canvas-pro"`: Uses the [html2canvas-pro](https://github.com/yorickshan/html2canvas-pro) library, which is a fork of `html2canvas` with additional features and improvements. It can be more accurate in rendering complex CSS and layouts.
 -   `None`: Disables screenshot functionality. No screenshot will be taken or included in the issue.
 
 **Example Configuration:**
@@ -69,7 +71,7 @@ The available options are:
 
 ISSUES = {
     # ... other settings
-    "RENDERER": "dom-to-image",
+    "RENDERER": "html2canvas-pro",
 }
 ```
 

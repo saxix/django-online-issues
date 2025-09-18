@@ -13,4 +13,4 @@ def get_backend(request: "HttpRequest") -> BaseBackend:
     return backend_class(request)
 
 
-__all__ = ["get_backend"]
+__all__ = ["get_backend", "BaseBackend"]
