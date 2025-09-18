@@ -3,6 +3,18 @@
 }
 
 #django-issues-modal-overlay {
+  #django-issues-form-container {
+    #django-issues-form-message-container {
+    }
+    #django-issues-form {
+      #django-issues-form-error-container {
+      }
+    }
+  }
+}
+
+#django-issues-modal-overlay {
+  all: unset;
   position: fixed;
   top: 0;
   left: 0;
@@ -14,62 +26,108 @@
   align-items: center;
   background-color: rgba(0, 0, 0, 0.6);
 
+
   #django-issues-form-container {
-    background-color: #AAAAAA;
+    all: unset;
+    background-color: #c1c0c0;
     color: black;
-    padding: 10px;
+    width: 450px;
+    justify-content: center;
     overflow-y: auto;
-    border: 1px #777777 solid;
+    border: 1px #5a5a5a solid;
     border-radius: 5px;
 
-    form {
+    #django-issues-form-message-container {
+      all: unset;
+      margin: 30px !important;
+      .django-issues-message{
+        text-align: center;
+      }
+    }
+
+    form#django-issues-form {
       display: flex;
       flex-direction: column;
-      margin: 10px;
-      p{
+      margin: auto;
+      width: 380px;
+
+      #django-issues-form-error-container {
+
+      }
+
+      p {
+        margin: 0;
         margin-bottom: 4px;
       }
+
+      input[type=text], textarea, select {
+        //all: unset;
+        background-color: white;
+        border: 1px solid black;
+        border-radius: 3px;
+        color: black;
+        padding: 3px 4px;
+        box-sizing: border-box;
+        font-size: small;
+        letter-spacing: normal;
+        width: 100%;
+      }
+
       textarea {
-        width: 97%;
-        margin: 0;
+        //width: 97%;
+        //margin: 0;
       }
 
       select {
-        width: 100%;
-        height: 40px;
+        //width: 100%;
+        height: 32px;
+        //background-image: url(data:image/svg+xml,svg xmlns= 'http://www.w3.org/2000/svg' viewBox= '0 0 48 48' %3e%3cpath fill= '#6B7280' d= 'M24 31.4 11.3 18.7l2.85-2.8L24 25.8l9.85-9.85 2.85 2.8Z' /%3e%3c/svg%3e);
+        background-position: right .7rem center;
+        background-repeat: no-repeat;
+        background-size: 1.125rem 1.125rem;
       }
 
       input[type="text"] {
-        line-height: 30px;
-        margin: 0;
-        width: 97%;
+        height: 32px;
+        //line-height: 30px;
+        //margin: 0;
+        //width: 97%;
       }
 
-      #screenshot-preview-container {
+      #django-issues-screenshot-preview-container {
         width: 100%;
         margin: 2px 0;
         height: 200px;
         transition: opacity 0.3s, visibility 0.3s;
         visibility: hidden;
         opacity: 0;
-
-        #screenshot-preview-img {
+        div.err{
+          text-align: center;
+          font-size: large;
+          font-weight: bold;
+        }
+        #django-issues-screenshot-preview-img {
           max-height: 100%;
           max-width: 100%;
         }
       }
 
       button {
-        background: #417690;
+        all: unset;
+        appearance: button;
+        width: 100%;
+        background: rgb(13, 81, 133);
         color: white;
-        padding: 5px 15px;
-        margin-top: 5px;
-        height: 2.1875rem;
-        line-height: 0.9375rem;
-        border: none;
+        padding: 8px 0;
+        text-align: center;
+        //margin-top: 5px;
+        //height: 2.1875rem;
+        //line-height: 0.9375rem;
+        //border: none;
         border-radius: 4px;
         cursor: pointer;
         transition: background 0.15s;
+        margin-bottom: 20px;
       }
     }
   }

@@ -13,6 +13,7 @@ from .backends._base import BaseBackend
 def check_issues_settings(app_configs: Iterable[AppConfig] | None, **kwargs: Any) -> list[CheckMessage]:
     errors: list[CheckMessage] = []
     override_issues_settings = getattr(settings, "ISSUES", {})
+    from .config import ALLOWED_RENDERERS
 
     if override_issues_settings:
         if not isinstance(override_issues_settings, dict):
@@ -45,11 +46,10 @@ def check_issues_settings(app_configs: Iterable[AppConfig] | None, **kwargs: Any
 
         # Check RENDERER
         renderer = override_issues_settings.get("RENDERER")
-        allowed_renderers = ["html2canvas", "dom-to-image"]
-        if renderer is not None and renderer not in allowed_renderers:
+        if renderer is not None and renderer not in ALLOWED_RENDERERS:
             errors.append(
                 Error(
-                    f"'{renderer}' is not a valid renderer. Must be one of {allowed_renderers} or None.",
+                    f"'{renderer}' is not a valid renderer. Must be one of {ALLOWED_RENDERERS} or None.",
                     id="issues.E005",
                 )
             )

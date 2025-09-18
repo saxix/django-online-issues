@@ -9,9 +9,8 @@ register = template.Library()
 
 @register.simple_tag
 def issues_tags() -> str:
-    from issues.config import CONFIG
+    from issues.config import ALLOWED_RENDERERS, CONFIG
 
-    static_url = static("/")
     url = reverse("issues:create")
 
     if settings.DEBUG:
@@ -21,8 +20,9 @@ def issues_tags() -> str:
     engine = CONFIG.RENDERER.lower() if CONFIG.RENDERER else ""  # Set engine to empty string if None
     css_url = static("issues/issues.css")
     js_url = static(f"issues/issues{suffix}.js")
+    axios_url = static(f"issues/axios{suffix}.js")
 
-    if CONFIG.RENDERER in ["html2canvas", "dom-to-image"]:
+    if CONFIG.RENDERER in ALLOWED_RENDERERS:
         renderer_url_tag = f'<script src="{static(f"issues/{CONFIG.RENDERER}{suffix}.js")}"></script>'
     elif CONFIG.RENDERER in [None, ""]:
         renderer_url_tag = ""  # No renderer script if RENDERER is None
@@ -32,7 +32,7 @@ def issues_tags() -> str:
     html = f"""
 <link rel="stylesheet" href="{css_url}">
 {renderer_url_tag}
-<script src="{static_url}issues/axios{suffix}.js"></script>
+<script src="{axios_url}"></script>
 <script id="django-issues-script" src="{js_url}" data-engine="{engine}" data-url="{url}"></script>
 """
     return mark_safe(html)  # noqa: S308
