@@ -1,16 +1,22 @@
+from typing import TYPE_CHECKING
+
 from django import template
 from django.conf import settings
 from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
+if TYPE_CHECKING:
+    from issues.backends import BaseBackend
+
 register = template.Library()
 
 
-@register.simple_tag
+@register.simple_tag()
 def issues_tags() -> str:
     from issues.config import ALLOWED_RENDERERS, CONFIG
 
+    backend_class: type[BaseBackend] = CONFIG.BACKEND
     url = reverse("issues:create")
 
     if settings.DEBUG:
@@ -22,7 +28,7 @@ def issues_tags() -> str:
     js_url = static(f"issues/issues{suffix}.js")
     axios_url = static(f"issues/axios{suffix}.js")
 
-    if CONFIG.RENDERER in ALLOWED_RENDERERS:
+    if backend_class.screenshot_supported and CONFIG.RENDERER in ALLOWED_RENDERERS:
         renderer_url_tag = f'<script src="{static(f"issues/{CONFIG.RENDERER}{suffix}.js")}"></script>'
     elif CONFIG.RENDERER in [None, ""]:
         renderer_url_tag = ""  # No renderer script if RENDERER is None
