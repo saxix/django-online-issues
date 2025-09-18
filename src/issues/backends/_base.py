@@ -39,8 +39,6 @@ class BaseBackend:
     def get_context(self) -> dict[str, Any]:
         from issues.config import CONFIG
 
-        if not CONFIG.ANNOTATIONS:
-            pass
         data = {
             "extras": {},
             "url": self.request.META.get("HTTP_REFERER", "N/A"),
