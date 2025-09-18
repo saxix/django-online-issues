@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             });
         });
-        issueOpener.style.display = 'block';
+        issueOpener.style.visibility = 'visible';
         console.log("django-issues initialised")
     }
 
