@@ -147,8 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     })
                     .catch(error => {
-                        console.log(error);
-                        // alert("Unexpected error occurred. Unable to open the issue");
+                        console.error('Error loading form:', error);
                     });
             }).catch(err => {
                 console.log(err);
@@ -156,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             });
         });
-        issueOpener.style.visibility = 'visible';
+        issueOpener.style.display = 'block';
         console.log("django-issues initialised")
     }
 
