@@ -37,7 +37,7 @@ repos:
           - --check
 
   - repo: https://github.com/saxix/pch
-    rev: '0.1'
+    rev: '4ae1ac5'
     hooks:
       - id: check-missed-migrations
         args:
@@ -50,3 +50,8 @@ repos:
           - src
           - tests
         stages: [ pre-push ]
+
+      - id: check-minimized
+        name: check missing minimized javascript
+        files: (\.js)$
+        exclude: (\.min\.js)$

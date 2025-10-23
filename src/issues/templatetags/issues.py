@@ -1,13 +1,8 @@
-from typing import TYPE_CHECKING
-
 from django import template
 from django.conf import settings
 from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-
-if TYPE_CHECKING:
-    from issues.backends import BaseBackend
 
 register = template.Library()
 
@@ -16,7 +11,6 @@ register = template.Library()
 def issues_tags() -> str:
     from issues.config import ALLOWED_RENDERERS, CONFIG
 
-    backend_class: type[BaseBackend] = CONFIG.BACKEND
     url = reverse("issues:create")
 
     if settings.DEBUG:
