@@ -1,17 +1,13 @@
 import json
 import logging
-from typing import TYPE_CHECKING, Any, cast
+from typing import Any, cast
 
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views import View
 
 from .backends import get_backend
-from .forms import IssueForm
-
-if TYPE_CHECKING:
-    from .types import IssueFormCleanedData
-
+from .forms import IssueForm, IssueFormCleanedData
 
 logger = logging.getLogger(__name__)
 
