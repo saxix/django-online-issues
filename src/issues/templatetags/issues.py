@@ -28,12 +28,15 @@ def issues_tags() -> str:
     js_url = static(f"issues/issues{suffix}.js")
     axios_url = static(f"issues/axios{suffix}.js")
 
-    if backend_class.screenshot_supported and CONFIG.RENDERER in ALLOWED_RENDERERS:
-        renderer_url_tag = f'<script src="{static(f"issues/{CONFIG.RENDERER}{suffix}.js")}"></script>'
+    if CONFIG.RENDERER in ALLOWED_RENDERERS:
+        renderer_url = CONFIG.get_renderer_script(suffix)
+        renderer_url_tag = f'<script src="{renderer_url}"></script>'
     elif CONFIG.RENDERER in [None, ""]:
         renderer_url_tag = ""  # No renderer script if RENDERER is None
     else:
-        raise ValueError("Invalid value for RENDERER in django-issues configuration. Check your settings")
+        raise ValueError(
+            f"Invalid value '{CONFIG.RENDERER}' for RENDERER in django-issues configuration. Check your settings"
+        )
 
     html = f"""
 <link rel="stylesheet" href="{css_url}">

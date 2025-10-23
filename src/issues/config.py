@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.signals import setting_changed
 from django.dispatch import receiver
 from django.http import HttpRequest
+from django.templatetags.static import static
 from django.utils.module_loading import import_string
 
 ISSUE_TEMPLATE = """
@@ -48,6 +49,22 @@ class IssuesConfig:
     def __repr__(self) -> str:
         return str(self._parsed)
 
+    def get_renderer_script(self, suffix: str = "") -> str:
+        raw_value: str | tuple[str, str] = self._parsed["RENDERER"]
+        if isinstance(raw_value, str):
+            return static(f"issues/{raw_value}{suffix}.js")
+        if isinstance(raw_value, tuple):
+            return raw_value[1]
+        return ""
+
+    def _clean_renderer(self) -> str:
+        raw_value: str | tuple[str, str] = self._parsed["RENDERER"]
+        if isinstance(raw_value, str | None):
+            return raw_value or ""
+        if isinstance(raw_value, tuple):
+            return raw_value[0]
+        raise ValueError(f"Unsupported type {type(raw_value)}")
+
     def load_annotations(self) -> None:
         self._cached["ANNOTATIONS"] = {}
         for k, v in self._parsed["ANNOTATIONS"].items():
@@ -68,7 +85,9 @@ class IssuesConfig:
         if name not in self._parsed:
             raise AttributeError(f" 'IssuesConfig' object has no attribute '{name}'")
         if name not in self._cached:
-            if name == "BACKEND":
+            if name == "RENDERER":
+                self._cached[name] = self._clean_renderer()
+            elif name == "BACKEND":
                 self._cached[name] = import_string(self._parsed["BACKEND"])
             elif name == "ANNOTATIONS":
                 self.load_annotations()

@@ -26,7 +26,7 @@ def test_issues_tags_debug_false():
 
 @override_settings(ISSUES={"RENDERER": "invalid_renderer"})
 def test_issues_tags_invalid_renderer():
-    with pytest.raises(ValueError, match="Invalid value for RENDERER"):
+    with pytest.raises(ValueError, match="Invalid value .* for RENDERER"):
         issues_tags()
 
 
@@ -36,3 +36,12 @@ def test_issues_tags_renderer_none():
     assert "issues.min.js" in html
     assert "html2canvas.min.js" not in html
     assert 'data-engine=""' in html
+
+
+@override_settings(DEBUG=False, ISSUES={"RENDERER": ("html2canvas", "http://example.com/html2canvas.min.js")})
+def test_issues_tags_custom_url():
+    html = issues_tags()
+
+    assert "issues.min.js" in html
+    assert "http://example.com/html2canvas.min.js" in html
+    assert 'data-engine="html2canvas"' in html

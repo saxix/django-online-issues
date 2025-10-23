@@ -9,7 +9,7 @@ from testutils.selenium import Browser
 @pytest.fixture
 def browser(live_server, request) -> Generator[Browser, None, None]:
     """SeleniumBase as a pytest fixture.
-    Usage example: "def test_one(sb):"
+    Usage example: "def test_one(browser):"
     You may need to use this for tests that use other pytest fixtures."""
 
     if request.cls:

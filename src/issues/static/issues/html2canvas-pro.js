@@ -1,5 +1,5 @@
 /*!
- * html2canvas-pro 1.5.11 <https://yorickshan.github.io/html2canvas-pro/>
+ * html2canvas-pro 1.5.12 <https://yorickshan.github.io/html2canvas-pro/>
  * Copyright (c) 2024-present yorickshan and html2canvas-pro contributors
  * Released under MIT License
  */
@@ -3977,24 +3977,44 @@
                 if (typeof transformFunction === 'undefined') {
                     throw new Error("Attempting to parse an unsupported transform function \"".concat(token.name, "\""));
                 }
-                return transformFunction(token.values);
+                return transformFunction(_context, token.values);
             }
             return null;
         }
     };
-    var matrix = function (args) {
+    var matrix = function (_context, args) {
         var values = args.filter(function (arg) { return arg.type === 17 /* TokenType.NUMBER_TOKEN */; }).map(function (arg) { return arg.number; });
         return values.length === 6 ? values : null;
     };
     // doesn't support 3D transforms at the moment
-    var matrix3d = function (args) {
+    var matrix3d = function (_context, args) {
         var values = args.filter(function (arg) { return arg.type === 17 /* TokenType.NUMBER_TOKEN */; }).map(function (arg) { return arg.number; });
         var a1 = values[0], b1 = values[1]; values[2]; values[3]; var a2 = values[4], b2 = values[5]; values[6]; values[7]; values[8]; values[9]; values[10]; values[11]; var a4 = values[12], b4 = values[13]; values[14]; values[15];
         return values.length === 16 ? [a1, b1, a2, b2, a4, b4] : null;
     };
+    var rotate$1 = function (context, args) {
+        if (args.length !== 1) {
+            return null;
+        }
+        var arg = args[0];
+        var radians = 0;
+        if (arg.type === 17 /* TokenType.NUMBER_TOKEN */ && arg.number === 0) {
+            radians = 0;
+        }
+        else if (arg.type === 15 /* TokenType.DIMENSION_TOKEN */) {
+            radians = angle.parse(context, arg);
+        }
+        else {
+            return null;
+        }
+        var cos = Math.cos(radians);
+        var sin = Math.sin(radians);
+        return [cos, sin, -sin, cos, 0, 0];
+    };
     var SUPPORTED_TRANSFORM_FUNCTIONS = {
         matrix: matrix,
-        matrix3d: matrix3d
+        matrix3d: matrix3d,
+        rotate: rotate$1
     };
 
     var DEFAULT_VALUE = {
@@ -4014,6 +4034,30 @@
                 return DEFAULT;
             }
             return [origins[0], origins[1]];
+        }
+    };
+
+    var rotate = {
+        name: 'rotate',
+        initialValue: 'none',
+        prefix: false,
+        type: 0 /* PropertyDescriptorParsingType.VALUE */,
+        parse: function (_context, token) {
+            if (token.type === 20 /* TokenType.IDENT_TOKEN */ && token.value === 'none') {
+                return null;
+            }
+            if (token.type === 17 /* TokenType.NUMBER_TOKEN */) {
+                if (token.number === 0) {
+                    return 0;
+                }
+            }
+            if (token.type === 15 /* TokenType.DIMENSION_TOKEN */) {
+                // Parse angle and convert to degrees for storage
+                var radians = angle.parse(_context, token);
+                // Store as degrees for consistency
+                return (radians * 180) / Math.PI;
+            }
+            return null;
         }
     };
 
@@ -4529,6 +4573,7 @@
             this.textTransform = parse(context, textTransform, declaration.textTransform);
             this.transform = parse(context, transform$1, declaration.transform);
             this.transformOrigin = parse(context, transformOrigin, declaration.transformOrigin);
+            this.rotate = parse(context, rotate, declaration.rotate);
             this.visibility = parse(context, visibility, declaration.visibility);
             this.webkitTextStrokeColor = parse(context, webkitTextStrokeColor, declaration.webkitTextStrokeColor);
             this.webkitTextStrokeWidth = parse(context, webkitTextStrokeWidth, declaration.webkitTextStrokeWidth);
@@ -4543,7 +4588,7 @@
             return isTransparent(this.backgroundColor);
         };
         CSSParsedDeclaration.prototype.isTransformed = function () {
-            return this.transform !== null;
+            return this.transform !== null || this.rotate !== null;
         };
         CSSParsedDeclaration.prototype.isPositioned = function () {
             return this.position !== 0 /* POSITION.STATIC */;
@@ -4653,6 +4698,10 @@
                 if (this.styles.transform !== null) {
                     // getBoundingClientRect takes transforms into account
                     element.style.transform = 'none';
+                }
+                if (this.styles.rotate !== null) {
+                    // Handle rotate property similarly to transform
+                    element.style.rotate = 'none';
                 }
             }
             this.bounds = parseBounds(this.context, element);
@@ -6118,16 +6167,27 @@
                     }
                 });
             }); });
-            var adoptedNode = documentClone.adoptNode(this.documentElement);
             /**
              * The baseURI of the document will be lost after documentClone.open().
-             * We can avoid it by adding <base> element.
+             * We save it before open() to preserve the original base URI for resource resolution.
              * */
-            addBase(adoptedNode, documentClone);
+            var baseUri = documentClone.baseURI;
             documentClone.open();
             documentClone.write("".concat(serializeDoctype(document.doctype), "<html></html>"));
             // Chrome scrolls the parent document for some reason after the write to the cloned window???
             restoreOwnerScroll(this.referenceElement.ownerDocument, scrollX, scrollY);
+            /**
+             * Note: adoptNode() should be called AFTER documentClone.open() and close()
+             *
+             * In Chrome, calling adoptNode() before or during open/write may cause
+             * styles with uppercase characters in class names (e.g. ".MyClass") to not apply correctly.
+             *
+             * Fix:
+             *   - Make sure adoptNode() is called after documentClone.open() and close()
+             *   - This allows Chrome to properly match and apply all CSS rules including mixed-case class selectors.
+             * */
+            var adoptedNode = documentClone.adoptNode(this.documentElement);
+            addBase(adoptedNode, baseUri);
             documentClone.replaceChild(adoptedNode, documentClone.documentElement);
             documentClone.close();
             return iframeLoad;
@@ -6536,10 +6596,10 @@
             body.appendChild(style);
         }
     };
-    var addBase = function (targetELement, referenceDocument) {
+    var addBase = function (targetELement, baseUri) {
         var _a;
-        var baseNode = referenceDocument.createElement('base');
-        baseNode.href = referenceDocument.baseURI;
+        var baseNode = targetELement.ownerDocument.createElement('base');
+        baseNode.href = baseUri;
         var headEle = targetELement.getElementsByTagName('head').item(0);
         headEle === null || headEle === void 0 ? void 0 : headEle.insertBefore(baseNode, (_a = headEle === null || headEle === void 0 ? void 0 : headEle.firstChild) !== null && _a !== void 0 ? _a : null);
     };
@@ -7006,6 +7066,17 @@
             this.curves = new BoundCurves(this.container);
             if (this.container.styles.opacity < 1) {
                 this.effects.push(new OpacityEffect(this.container.styles.opacity));
+            }
+            if (this.container.styles.rotate !== null) {
+                var offsetX = this.container.bounds.left + this.container.styles.transformOrigin[0].number;
+                var offsetY = this.container.bounds.top + this.container.styles.transformOrigin[1].number;
+                // Apply rotate property if present
+                var angle = this.container.styles.rotate;
+                var rad = (angle * Math.PI) / 180;
+                var cos = Math.cos(rad);
+                var sin = Math.sin(rad);
+                var rotateMatrix = [cos, sin, -sin, cos, 0, 0];
+                this.effects.push(new TransformEffect(offsetX, offsetY, rotateMatrix));
             }
             if (this.container.styles.transform !== null) {
                 var offsetX = this.container.bounds.left + this.container.styles.transformOrigin[0].number;
